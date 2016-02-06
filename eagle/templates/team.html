@@ -1,0 +1,16 @@
+{% include "partials/header.html" %}
+
+<h1>Team {{ team.number }}</h1>
+<h2>{{ team.nickname }}</h2>
+
+<p><a target="_blank" href="https://thebluealliance.com/team/{{ team.number }}">See more on The Blue Alliance</a></p>
+
+<h4>Events</h4>
+
+<ul>
+{% for event in events %}
+	<li><a href="/event/{{ event.event_key }}">{{ event.name }}</a></li>
+{% endfor %}
+</ul>
+
+{% include "partials/footer.html" %}

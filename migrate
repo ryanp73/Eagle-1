@@ -1,0 +1,36 @@
+<?php
+
+require_once './vendor/autoload.php';
+
+require_once './eagle/database/Connection.php';
+
+$conn = new Connection();
+
+echo "Are you sure you want to migrate? [y/n]";
+
+$answer = trim(fgets(STDIN));
+
+if ($answer == 'y' || $answer == 'Y')
+{
+	foreach (glob('./eagle/database/migrations/*.php') as $file)
+	{
+		require_once $file;
+
+		$class = basename($file, '.php');
+
+		$obj = new $class;
+		$obj->up();
+
+		echo $class . " Done\n";
+	}
+}
+
+echo "\nWould you like to seed the database? [y/n]";
+
+$answer = trim(fgets(STDIN));
+
+if ($answer == 'y' || $answer == 'Y')
+{
+	require_once './eagle/database/seeders/Seeder.php';
+	echo "Finished seeding";
+}
