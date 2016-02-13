@@ -1,0 +1,16 @@
+{% include 'partials/header.html' %}
+
+<h1>Comments for Team {{ team.team_number }}</h1>
+
+{% for comment in comments %}
+<div class="panel panel-default">
+	<div class="panel-body">
+		{{ comment.notes }}
+	</div>
+	<div class="panel-heading">
+		{{ comment.author }}
+	</div>
+</div>
+{% endfor %}
+
+{% include 'partials/footer.html' %}

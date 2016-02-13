@@ -3,12 +3,12 @@
 <h1>{{ event.name }}</h1>
 <h3>{{ event.start_date | date('D, F d') }} - {{ event.end_date | date('D, F d, Y') }}</h3>
 
-<p><a target="_blank" href="https://thebluealliance.com/event/{{ event.event_key }}">See more on The Blue Alliance</a></p>
+<p><a target="_blank" href="https://thebluealliance.com/event/{{ event.key }}">See more on The Blue Alliance</a></p>
 
 <h3>Teams</h3>
 <ul>
 	{% for team in teams %}
-		<li><a href="/team/{{ team.number }}">{{ team.number }} - {{  team.nickname }}</a></li>
+		<li><a href="/team/{{ team.team_number }}">{{ team.team_number }} - {{  team.nickname }}</a></li>
 	{% endfor %}
 </ul>
 

@@ -10,6 +10,7 @@ class CommentMigration
 		Capsule::schema()->create('comments', function ($table) {
 			$table->increments('id');
 			$table->integer('user_id');
+			$table->string('author');
 			$table->integer('team_id');
 			$table->text('notes');
 			$table->timestamps();

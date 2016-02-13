@@ -6,7 +6,7 @@ class Downloader
 	public static function downloadFromUrl($url)
 	{
 		$data = file_get_contents($url);
-		return json_decode($data);
+		return $data;
 	}
 
 	public static function getFromTba($urlCore)
@@ -16,62 +16,60 @@ class Downloader
 		return self::downloadFromUrl($urlStart . $urlCore . $urlEnd);
 	}
 
-	public static function getTeam($teamId) 
+	public static function writeDataToFile($filename, $data) 
 	{
-		require_once './eagle/models/Team.php';
-
-		$urlCore  = 'team/frc' . $teamId;
-		$teamData = self::getFromTba($urlCore);
-		$teamEventsData = self::getFromTba($urlCore . '/events');
-		
-
-		$events = '';
-		foreach ($teamEventsData as $event) {
-			$events .= $event->key . '|';
+		if (!file_exists(dirname($filename)))
+		{
+			mkdir(dirname($filename));
 		}
 
-		$events = trim($events, '|');
+		$file = fopen($filename, 'w');
+		fwrite($file, $data);
+		fclose($file);
+	}
 
-		$team = new Team;
-		$team->number = $teamId;
-		$team->nickname = $teamData->nickname;
-		$team->events = $events;
-		$team->save();
+	public static function getTeam($teamId) 
+	{
+		$urlCore  = 'team/frc' . $teamId;
+		$team = self::getFromTba($urlCore);
+
+		$filename = './data/' . $teamId . '/basic-info.json';
+
+		self::writeDataToFile($filename, $team);
+
+		self::getEventsForTeam($teamId);
+	}
+
+	public static function getEventsForTeam($teamId) 
+	{
+		$urlCore  = 'team/frc' . $teamId . '/events';
+		$teamEvents = self::getFromTba($urlCore);
+
+		$filename = './data/' . $teamId . '/events.json';
+
+		self::writeDataToFile($filename, $teamEvents);
 	}
 
 	public static function getEvent($eventId)
 	{
-		require_once './eagle/models/Event.php';
-
 		$urlCore  = 'event/' . $eventId;
-		$eventData = self::getFromTba($urlCore);
+		$event = self::getFromTba($urlCore);
 
-		$event = new Event;
-		$event->event_key = $eventId;
-		$event->name = $eventData->name;
-		$event->start_date = $eventData->start_date;
-		$event->end_date   = $eventData->end_date;
-		$event->save();
+		$filename = './data/' . $eventId . '/basic-info.json';
+
+		self::writeDataToFile($filename, $event);
+
+		self::getTeamsAtEvent($eventId);
 	}
 
 	public static function getTeamsAtEvent($eventId)
 	{
-		require_once './eagle/models/Event.php';
-		require_once './eagle/models/TeamEvent.php';
-
 		$urlCore  = 'event/' . $eventId . '/teams';
 		$teamsAtEvent = self::getFromTba($urlCore);
 
-		var_dump($teamsAtEvent);
-		die();
+		$filename = './data/' . $eventId . '/teams.json';
 
-		foreach ($teamsAtEvent as $team)
-		{
-			$teamEvent = new TeamEvent;
-			$teamEvent->event_key   = $eventId;
-			$teamEvent->team_number = $team->team_number;
-			$teamEvent->save();
-		}
+		self::writeDataToFile($filename, $teamsAtEvent);
 	}
 
 }
