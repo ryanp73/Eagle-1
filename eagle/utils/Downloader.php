@@ -72,4 +72,14 @@ class Downloader
 		self::writeDataToFile($filename, $teamsAtEvent);
 	}
 
+	public static function getMatchesAtEvent($eventId)
+	{
+		$urlCore  = 'event/' . $eventId . '/matches';
+		$teamsAtEvent = self::getFromTba($urlCore);
+
+		$filename = './data/' . $eventId . '/matches.json';
+
+		self::writeDataToFile($filename, $teamsAtEvent);
+	}
+
 }

@@ -100,5 +100,58 @@ $app->group('/scouting', function()  use ($app) {
 			'author' => $defense->author
 		]);
 	});
+
+	$this->get('/match/new/{id:20\d{2}[a-z]{3,5}_[a-z]{1,2}\d?m\d{1,3}}', function($req, $res, $args) {		
+		$this->view->render($res, 'matchScouting.html', [
+			'title' => 'New Match Scouting',
+			'user' => Auth::getLoggedInUser(),
+			'id' => $args['id']
+		]);
+	});
+
+	$this->get('/match', function($req, $res, $args) {
+		$this->view->render($res, 'matchScoutingHome.html', [
+			'title' => 'Match Scouting',
+			'user' => Auth::getLoggedInUser()
+		]);
+	});
+
+	$this->post('/match', function($req, $res, $args) {
+		$str = '2016';
+		$str .= $_POST['competition'];
+		$str .= '_';
+		$str .= $_POST['matchType'];
+		if ($_POST['matchType'] != 'q') $str .= '1';
+		$str .= 'm';
+		$str .= $_POST['matchNumber'];
+		$event = split('_', $str)[0];
+		Downloader::getMatchesAtEvent($event);
+		return $res->withStatus(302)->withHeader('Location', '/scouting/match/new/' . $str);
+	});
+
+	$this->post('/match/new', function($req, $res, $args) {
+		$comment = new Comment();
+		$comment->user_id = Auth::getLoggedInUser()->id;
+		$comment->author = Auth::getLoggedInUser()->name;
+		$comment->team_id = $_POST['team_id'];
+		$comment->notes = $_POST['notes'];
+		$comment->save();
+
+		$match = new MatchScouting();
+		$match->team_id = $_POST['team_id'];
+		$match->user_id = Auth::getLoggedInUser()->id;
+		$match->author = Auth::getLoggedInUser()->name;
+		$match->match_id = $_POST['match_id'];
+		$match->driver_skill = $_POST['driver_skill'];
+		$match->robot_speed = $_POST['robot_speed'];
+		$match->manueverability = $_POST['manueverability'];
+		$match->penalties = $_POST['penalties'];
+		$match->helpfulness = $_POST['helpfulness'];
+		$match->work_well_with_us = $_POST['work_well_with_us'];
+		$match->notes_id = $comment->id;
+		$match->save();
+		header('Location:/team/' . $_POST['team_id'], '/');
+		exit();
+	});
 	
 });

@@ -2,7 +2,7 @@ Pit Scouting:
 ~1. Display the rest of the data~
 
 Match Scouting:
-1. Match scouting form
+~1. Match scouting form~
 2. View match data
 
 Event Page:

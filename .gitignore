@@ -1,3 +1,5 @@
 app/config/*
 data.db
 vendor/*
+data*.db
+data/
