@@ -2,6 +2,7 @@
 
 require_once './eagle/utils/Downloader.php';
 require_once './eagle/utils/FileReader.php';
+require_once './eagle/utils/Utils.php';
 require_once './eagle/models/PitScouting.php';
 require_once './eagle/models/Defense.php';
 require_once './eagle/models/MatchScouting.php';
@@ -14,9 +15,22 @@ $app->group('/scouting', function()  use ($app) {
 		exit();
 	});
 
-	$this->get('/pit/new', function($req, $res, $args) {
+	$this->get('/pit', function($req, $res, $args) {
+		Auth::getLoggedInUser();
+		$event = Utils::getCurrentEvent();
+		$this->view->render($res, 'pitScoutingHome.html', [
+			'title' => 'Pit Scouting Home',
+			'teams' => Utils::getUnscoutedTeams($event),
+			'event' => FileReader::getEvent($event),
+			'user' => Auth::getLoggedInUser()
+		]);
+	});
+
+	$this->get('/pit/new/{team:[0-9]{1,4}}', function($req, $res, $args) {
+		Auth::getLoggedInUser();
 		$this->view->render($res, 'pitScouting.html', [
-			'title' => 'New Pit Scouting',
+			'title' => 'Pit Scouting for ' . $args['team'],
+			'team' => $args['team'],
 			'user' => Auth::getLoggedInUser()
 		]);
 	});
@@ -48,6 +62,7 @@ $app->group('/scouting', function()  use ($app) {
 		$pit->team_id = $_POST['team_id'];
 		$pit->user_id = Auth::getLoggedInUser()->id;
 		$pit->author = Auth::getLoggedInUser()->name;
+		$pit->event_id = Utils::getCurrentEvent();
 		$pit->num_boulders = $_POST['num_boulders'];
 		$pit->boulders = $_POST['boulders'];
 		$pit->hanging = $_POST['climbing'];

@@ -1,0 +1,12 @@
+{% include 'partials/header.html' %}
+
+<h2>{{ event.name }}</h2>
+<h3>Teams That Need Pit Scouting</h3>
+
+<ul>
+	{% for team in teams %}
+		<li><a href="/scouting/pit/new/{{ team.team_number }}">{{ team.team_number }} - {{  team.nickname }}</a></li>
+	{% endfor %}
+</ul>
+
+{% include 'partials/footer.html' %}

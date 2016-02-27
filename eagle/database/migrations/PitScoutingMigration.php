@@ -11,6 +11,7 @@ class PitScoutingMigration
 			$table->increments('id');
 			$table->integer('team_id');
 			$table->integer('user_id');
+			$table->string('event_id');
 			$table->string('author');
 			$table->string('boulders');
 			$table->string('num_boulders');

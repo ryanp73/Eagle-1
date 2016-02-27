@@ -63,4 +63,28 @@ class FileReader
 		return self::readFile($filename);
 	}
 
+	public static function getMatchesAtEvent($eventId, $update = false)
+	{
+		if ($update)
+		{
+			require_once './eagle/utils/Downloader.php';
+			Downloader::getMatchesAtEvent($eventId);
+		}
+
+		$filename = './data/' . $eventId . '/matches.json';
+		return self::readFile($filename);
+	}
+
+	public static function getStatsAtEvent($eventId, $update = false)
+	{
+		if ($update)
+		{
+			require_once './eagle/utils/Downloader.php';
+			Downloader::getStatsAtEvent($eventId);
+		}
+
+		$filename = './data/' . $eventId . '/stats.json';
+		return self::readFile($filename);
+	}
+
 }

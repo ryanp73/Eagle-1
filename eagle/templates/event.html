@@ -5,11 +5,90 @@
 
 <p><a target="_blank" href="https://thebluealliance.com/event/{{ event.key }}">See more on The Blue Alliance</a></p>
 
-<h3>Teams</h3>
-<ul>
-	{% for team in teams %}
-		<li><a href="/team/{{ team.team_number }}">{{ team.team_number }} - {{  team.nickname }}</a></li>
-	{% endfor %}
+<div class="jumbotron"><button class="btn btn-default" id="update">Update Data!</button></div>
+
+<ul class="nav nav-tabs" role="tablist">
+	<li class="active"><a href="#teams" data-toggle="tab">Teams</a></li>
+	<li><a href="#stats" data-toggle="tab">Stats</a></li>
+	<li><a href="#matches" data-toggle="tab">Matches</a></li>
+	<li><a href="#rankings" data-toggle="tab">Rankings</a></li>
 </ul>
+
+<div class="tab-content">
+	<div class="tab-pane active" id="teams">
+		<h3>Teams</h3>
+		<ul>
+			{% for team in teams %}
+				<li><a href="/team/{{ team.team_number }}">{{ team.team_number }} - {{  team.nickname }}</a></li>
+			{% endfor %}
+		</ul>
+	</div>
+	<div class="tab-pane" id="stats">
+		<h3>Stats</h3>
+		<table class="table table-striped">
+			<thead>
+				<th id="stats-number">Team</th>
+				<th id="stats-opr">OPR</th>
+				<th id="stats-dpr">DPR</th>
+				<th id="stats-ccwm">CCWM</th>
+			</thead>
+			<tbody>
+				{% for team in stats %}
+				<tr>
+					<td class="number"><a href="/team/{{ team.number }}">{{ team.number }}</a></td>
+					<td class="opr">{{ team.opr }}</td>
+					<td class="dpr">{{ team.dpr }}</td>
+					<td class="ccwm">{{ team.ccwm }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div class="tab-pane" id="matches"></div>
+	<div class="tab-pane" id="rankings"></div>
+</div>
+
+<script type="text/javascript">
+	function getValue(array, index, column) 
+	{
+		return parseInt($(array[index].children[column]).text());
+	}
+
+	function sort(column) 
+	{
+		var trs = $('tr').get();
+		for (var i = 1; i < trs.length - 1; i++)
+		{
+			for (var j = i + 1; j < trs.length; j++)
+			{
+				var maxValue = getValue(trs, i, column);
+				var maxIndex = i;
+				if (getValue(trs, j, column) > maxValue)
+				{
+					temp = trs[j];
+					trs[j] = trs[maxIndex];
+					trs[maxIndex] = temp;
+					maxIndex = j;
+					maxValue = getValue(trs, maxIndex, column);
+				}
+			}
+		}
+		for (var i = 1; i < trs.length; i++)
+		{
+			$('tbody>tr:last').after($(trs[i]));
+		}
+	}
+
+	$('#stats-number').click(function() {sort(0)});
+	$('#stats-opr').click(function() {sort(1)});
+	$('#stats-dpr').click(function() {sort(2)});
+	$('#stats-ccwm').click(function() {sort(3)});
+
+	$('#update').click(function(e) {
+		e.preventDefault();
+		window.location.href = '/event/{{ event.key }}/update'
+	});
+
+</script>
 
 {% include 'partials/footer.html' %}
