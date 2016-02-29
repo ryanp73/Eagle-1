@@ -3,3 +3,7 @@ data.db
 vendor/*
 data*.db
 data/
+pw_maze_black.png
+background.jpg
+logo.png
+composer.lock

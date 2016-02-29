@@ -17,6 +17,15 @@ $app->get('/failure', function($req, $res, $args) {
 	]);
 });
 
+$app->get('/directory', function($req, $res, $args) {
+	$this->view->render($res, 'directory.html', [
+		'title' => 'User Directory',
+		'loggedIn' => Auth::checkLoggedIn(),
+		'user' => Auth::getLoggedInUser(),
+		'users' => User::all()
+	]);
+});
+
 $app->post('/login', function($req, $res, $args) {
 	if (Auth::login($_POST['email'], $_POST['password']))
 	{	

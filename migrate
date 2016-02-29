@@ -6,22 +6,34 @@ require_once './eagle/database/Connection.php';
 
 $conn = new Connection();
 
-echo "Are you sure you want to migrate? [y/n]";
-
-$answer = trim(fgets(STDIN));
-
-if ($answer == 'y' || $answer == 'Y')
+if (isset($argv[1]))
 {
-	foreach (glob('./eagle/database/migrations/*.php') as $file)
+	$file = './eagle/database/migrations/' . $argv[1] . '.php';
+	require_once $file;
+	$class = basename($file, '.php');
+	$obj = new $class;
+	$obj->up();
+	echo $class . " Done\n";
+}
+else 
+{
+	echo "Are you sure you want to migrate? [y/n]";
+
+	$answer = trim(fgets(STDIN));
+
+	if ($answer == 'y' || $answer == 'Y')
 	{
-		require_once $file;
+		foreach (glob('./eagle/database/migrations/*.php') as $file)
+		{
+			require_once $file;
 
-		$class = basename($file, '.php');
+			$class = basename($file, '.php');
 
-		$obj = new $class;
-		$obj->up();
+			$obj = new $class;
+			$obj->up();
 
-		echo $class . " Done\n";
+			echo $class . " Done\n";
+		}
 	}
 }
 

@@ -87,4 +87,16 @@ class FileReader
 		return self::readFile($filename);
 	}
 
+	public static function getRankingsAtEvent($eventId, $update = false)
+	{
+		if ($update)
+		{
+			require_once './eagle/utils/Downloader.php';
+			Downloader::getRankingsAtEvent($eventId);
+		}
+
+		$filename = './data/' . $eventId . '/rankings.json';
+		return self::readFile($filename);
+	}
+
 }

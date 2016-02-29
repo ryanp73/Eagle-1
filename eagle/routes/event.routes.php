@@ -29,6 +29,29 @@ $app->group('/event', function() {
 			header('Refresh:0');
 		}
 
+		$matches = FileReader::getMatchesAtEvent($args['event']);
+
+		if (!count($matches))
+		{
+			Downloader::getMatchesAtEvent($args['event']);
+			header('Refresh:0');
+		}
+
+		$types = array('f' => 'Finals', 'sf' => 'Semifinals', 'qf' => 'Quarter Final', 'qm' => 'Qualifier');
+
+		foreach ($matches as $match) 
+		{
+			$match->match_type = $types[$match->comp_level];
+		}
+
+		$rankings = FileReader::getRankingsAtEvent($args['event']);
+
+		if (!count($rankings))
+		{
+			Downloader::getRankingsAtEvent($args['event']);
+			header('Refresh:0');
+		}
+
 		$dlstats = FileReader::getStatsAtEvent($args['event']);
 
 		if (!$dlstats && !count($dlstats))
@@ -53,6 +76,8 @@ $app->group('/event', function() {
 			'event' => $event,
 			'teams' => $teams,
 			'stats' => $stats,
+			'rankings' => $rankings,
+			'matches' => $matches,
 			'user'  => Auth::getLoggedInUser()
 		]);
 	});
@@ -63,6 +88,7 @@ $app->group('/event', function() {
 		FileReader::getTeamsAtEvent($args['event'], true);
 		FileReader::getMatchesAtEvent($args['event'], true);
 		FileReader::getStatsAtEvent($args['event'], true);
+		FileReader::getRankingsAtEvent($args['event'], true);
 		return $res->withStatus(302)->withHeader('Location', '/event/' . $args['event']);
 	});
 });
