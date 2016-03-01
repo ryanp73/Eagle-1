@@ -2,7 +2,7 @@
 
 session_start();
 
-require_once 'vendor/autoload.php';
+require_once './vendor/autoload.php';
 require_once './eagle/database/Connection.php';
 
 $c = new \Slim\Container(include './eagle/config/config.php');
