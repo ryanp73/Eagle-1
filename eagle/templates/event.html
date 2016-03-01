@@ -120,9 +120,9 @@
 		return parseInt($(array[index].children[column]).text());
 	}
 
-	function sort(table, column, reverse = false) 
+	function sort(table, column, isReversed) 
 	{
-		if (!reverse)
+		if (!isReversed)
 		{
 			var trs = $('#' + table + '>tbody>tr').get();
 			for (var i = 0; i < trs.length - 1; i++)
@@ -167,26 +167,26 @@
 			$('#' + table + '>tbody>tr:last').after($(trs[i]));
 		}
 	}
+	// Pardon the messiness of this
+	$('#stats-number').on('click touchstart', function() {sort('tstats',0,true)});
+	$('#stats-opr').on('click touchstart', function() {sort('tstats',1,false)});
+	$('#stats-dpr').on('click touchstart', function() {sort('tstats',2,false)});
+	$('#stats-ccwm').on('click touchstart', function() {sort('tstats',3,false)});
+	$('#match-type').on('click touchstart', function() {sort('tmatches',0,true)});
+	$('#match-number').on('click touchstart', function() {sort('tmatches',1,true)});
+	$('#match-rs').on('click touchstart', function() {sort('tmatches',5,false)});
+	$('#match-bs').on('click touchstart', function() {sort('tmatches',9,false)});
+	$('#rank-rank').on('click touchstart', function() {sort('trankings',0,true)});
+	$('#rank-team').on('click touchstart', function() {sort('trankings',1,false)});
+	$('#rank-rp').on('click touchstart', function() {sort('trankings',2,false)});
+	$('#rank-auto').on('click touchstart', function() {sort('trankings',3,false)});
+	$('#rank-sc').on('click touchstart', function() {sort('trankings',4,false)});
+	$('#rank-goals').on('click touchstart', function() {sort('trankings',5,false)});
+	$('#rank-defense').on('click touchstart', function() {sort('trankings',6,false)});
+	$('#rank-record').on('click touchstart', function() {sort('trankings',7,false)});
+	$('#rank-played').on('click touchstart', function() {sort('trankings',8,false)});
 
-	$('#stats-number').click(function() {sort('tstats',0,true)});
-	$('#stats-opr').click(function() {sort('tstats',1)});
-	$('#stats-dpr').click(function() {sort('tstats',2)});
-	$('#stats-ccwm').click(function() {sort('tstats',3)});
-	$('#match-type').click(function() {sort('tmatches',0,true)});
-	$('#match-number').click(function() {sort('tmatches',1,true)});
-	$('#match-rs').click(function() {sort('tmatches',5)});
-	$('#match-bs').click(function() {sort('tmatches',9)});
-	$('#rank-rank').click(function() {sort('trankings',0,true)});
-	$('#rank-team').click(function() {sort('trankings',1)});
-	$('#rank-rp').click(function() {sort('trankings',2)});
-	$('#rank-auto').click(function() {sort('trankings',3)});
-	$('#rank-sc').click(function() {sort('trankings',4)});
-	$('#rank-goals').click(function() {sort('trankings',5)});
-	$('#rank-defense').click(function() {sort('trankings',6)});
-	$('#rank-record').click(function() {sort('trankings',7)});
-	$('#rank-played').click(function() {sort('trankings',8)});
-
-	$('#update').click(function(e) {
+	$('#update').on('click touchstart',function(e) {
 		e.preventDefault();
 		window.location.href = '/event/{{ event.key }}/update';
 	});
