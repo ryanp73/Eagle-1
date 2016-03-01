@@ -1,0 +1,16 @@
+	</div>
+</div>
+<script>
+	$('#teamBtn').click(function(e) {
+		e.preventDefault();
+		data = $('#teamSearch').val();
+		window.location.href = '/team/' + data;	
+	});
+	$('#eventBtn').click(function(e) {
+		e.preventDefault();
+		data = $('#eventSearch').val();
+		window.location.href = '/event/' + data;	
+	});
+</script>
+</body>
+</html>

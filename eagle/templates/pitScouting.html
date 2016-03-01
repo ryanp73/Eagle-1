@@ -1,0 +1,95 @@
+{% include 'partials/header.html' %}
+
+<h1>Pit Scouting</h1>
+
+<form method="post" action="/scouting/pit/new" role="form">
+	<div class="form-group">
+		<input type="hidden" id="team_id" name="team_id" class="form-control" value="{{ team }}">
+	</div> 
+
+{% include 'defenseScouting.html' %}
+	<div class="form-group">
+		<h3>Boulders</h3>
+		<div class="radio">
+			<label class="checkbox-inline">
+				<input type="radio" name="boulders" id="boulders1" value="0" checked> Can't shoot. 
+			</label>
+			<label class="checkbox-inline">
+				<input type="radio" name="boulders" id="boulders2" value="1"> Low goal preferred. 
+			</label>
+			<label class="checkbox-inline">
+				<input type="radio" name="boulders" id="boulders3" value="2"> High goal preferred. 
+			</label>
+		</div>
+		<label for="num_boulders">Approximate number of boulders:</label>
+		<input type="number" autocomplete="off" required id="num_boulders" name="num_boulders" class="form-control" placeholder="Estimatd Boulders" min="0" max="8">
+	</div>
+	<div class="form-group">
+		<h3>Defensive play</h3>
+		<div class="radio">
+			<label class="checkbox-inline">
+				<input type="radio" name="defensive_play" id="defensive_play1" value="0" checked> Can't play defense. 
+			</label>
+			<label class="checkbox-inline">
+				<input type="radio" name="defensive_play" id="defensive_play2" value="1"> Can, but don't want to. 
+			</label>
+			<label class="checkbox-inline">
+				<input type="radio" name="defensive_play" id="defensive_play3" value="2"> Prefer to play defense. 
+			</label>
+		</div>
+	</div>
+	<div class="radio">
+		<p>Climbing</p>
+		<label class="checkbox-inline">
+			<input type="radio" name="climbing" id="climbing1" value="0" checked> Can't climb. 
+		</label>
+		<label class="checkbox-inline">
+			<input type="radio" name="climbing" id="climbing2" value="1"> Can climb, but inconsistent. 
+		</label>
+		<label class="checkbox-inline">
+			<input type="radio" name="climbing" id="climbing3" value="2"> Can climb and is consistent. 
+		</label>
+	</div>
+	<div class="form-group">
+		<label for="sensors">What sensors do they use?</label>
+		<input type="text" autocomplete="off" required name="sensors" id="sensors" class="form-control">
+	</div>
+	<div class="form-group">
+		<label for="approx_points">Average number of points per match in practice?</label>
+		<input type="number" autocomplete="off" required name="approx_points" id="approx_points" class="form-control" min="0" max="150" step="5">
+	</div>
+	<div class="form-group">
+		<label for="approx_cycles">Average number of cycles per match in practice?</label>
+		<input type="number" autocomplete="off" required name="approx_cycles" id="approx_cycles" class="form-control" min="0" max="12">
+	</div>
+	<div class="form-group">
+		<label for="num_drivers">Number of drivers?</label>
+		<input type="number" autocomplete="off" required name="num_drivers" id="num_drivers" class="form-control" min="1" max="2">
+	</div>
+	<div class="form-group">
+	    <label for="drivetrain">Drivetrain?</label>
+	    <select class="form-control" id="drivetrain" name="drivetrain">
+			<option value="4 Wheel Tank">4 Wheel Tank</option>
+			<option value="6 Wheel Tank">6 Wheel Tank</option>
+			<option value="8 Wheel Tank">8 Wheel Tank</option>
+			<option value="Tank Tread">Tank Tread</option>
+			<option value="Mecanum">Mecanum</option>
+			<option value="Swerve">Swerve</option>
+			<option value="6 Wheel Drop">6 Wheel Drop</option>
+			<option value="8 Wheel Drop">8 Wheel Drop</option>
+			<option value="H Drive">H Drive</option>
+			<option value="Holonomic">Holonomic</option>
+		</select>
+	</div>
+	<div class="form-group">
+		<label for="autonomous_notes">Autonomous Strategy Notes</label>
+		<textarea required name="autonomous_notes" id="autonomous_notes" class="form-control"></textarea>
+	</div>
+	<div class="form-group">
+		<label for="notes">Notes:</label>
+		<textarea required id="notes" name="notes" class="form-control"></textarea>
+	</div>
+	<button type="submit" class="btn btn-primary">Submit Pit Scouting!</button>
+</form>
+
+{% include 'partials/footer.html' %}

@@ -1,0 +1,17 @@
+{
+    "name": "ryanp73/eagle-v3",
+    "description": "A scouting app for FRC Team 2410",
+    "require": {
+        "slim/slim": "3.1.0",
+        "slim/twig-view": "2.0.0",
+        "illuminate/database": "5.2.7",
+        "monolog/monolog": "1.17.2"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ryan Pope",
+            "email": "poperyan73@gmail.com"
+        }
+    ]
+}

@@ -1,0 +1,58 @@
+{% include 'partials/header.html' %}
+
+<h2>Match Scouting</h2>
+
+<form action="/scouting/match/new" method="POST" role="form">
+	
+	{% if id %}
+		<input required type="hidden" name="match_id" value="{{ id }}">
+	{% else %}
+		<div class="form-group">
+			<label for="match_id">Match Key</label>
+			<input required class="form-control" type="text" name="match_id" id="match_id">
+		</div>	
+	{% endif %}
+
+	<div class="form-group">
+			<label for="team_id">Team Number</label>
+			<input required class="form-control" type="text" name="team_id" id="team_id">
+		</div>	
+
+	<div class="form-group">
+		<label for="driver_skill">Driver Skill</label>
+		<input required class="form-control" type="number" name="driver_skill" id="driver_skill" min="1" max="10">
+	</div>
+
+	<div class="form-group">
+		<label for="robot_speed">Robot Speed</label>
+		<input required class="form-control" type="number" name="robot_speed" id="robot_speed" min="1" max="10">
+	</div>
+
+	<div class="form-group">
+		<label for="manueverability">Manueverability</label>
+		<input required class="form-control" type="number" name="manueverability" id="manueverability" min="1" max="10">
+	</div>
+
+	<div class="form-group">
+		<label for="penalties">Penalties</label>
+		<input required class="form-control" type="number" name="penalties" id="penalties" min="1" max="10">
+	</div>
+
+	<div class="form-group">
+		<label for="helpfulness">How helpful is this team to their alliance?</label>
+		<input required class="form-control" type="number" name="helpfulness" id="helpfulness" min="1" max="10">
+	</div>
+
+	<div class="form-group">
+		<label for="work_well_with_us">How well this robot work with us?</label>
+		<input required class="form-control" type="number" name="work_well_with_us" id="work_well_with_us" min="1" max="10">
+	</div>
+
+	<div class="form-group">
+		<label for="notes">Notes:</label>
+		<textarea required class="form-control" id="notes" name="notes" class="form-control"></textarea>
+	</div>
+	<button type="submit" class="btn btn-primary">Submit Pit Scouting!</button>
+</form>
+
+{% include 'partials/footer.html' %}

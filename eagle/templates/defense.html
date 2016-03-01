@@ -1,0 +1,21 @@
+{% include 'partials/header.html' %}
+
+<h2>Defenses of Team {{ team_number }}</h2>
+
+<div class="panel panel-default">
+	<div class="panel-body">
+	<table class="table table-striped">
+		{% for name, value in defenses %}
+			<tr>
+				<td>{{ name }}</td>
+				<td>{{ value }}</td>
+			</tr>
+		{% endfor %}
+	</table>
+	</div>
+	<div class="panel-heading">
+		{{ author }}
+	</div>
+</div>
+
+{% include 'partials/footer.html' %}

@@ -1,0 +1,23 @@
+{% include 'partials/header.html' %}
+
+<h2>User Direcotry</h2>
+
+<table class="table">
+<thead>
+	<th>Name</th>
+	<th>Email</th>
+	<th>Rank</th>
+</thead>
+<tbody>
+{% for tuser in users %}
+<tr>
+	<td>{{ tuser.name }}</td>
+	<td>{{ tuser.email }}</td>
+	<td>{{ tuser.rank }}</td>
+	<td><a href="/user/{{ tuser.id }}/delete">X</a></td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+{% include 'partials/footer.html' %}
