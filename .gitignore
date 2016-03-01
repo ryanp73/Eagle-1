@@ -1,0 +1,4 @@
+data/
+app/config/*
+vendor/
+composer.lock
