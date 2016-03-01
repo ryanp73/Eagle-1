@@ -23,11 +23,11 @@ $c = new Connection();
 
 ini_set('max_execution_time', 60);
 
-require_once './eagle/routes/base.routes.php';
+require_once './eagle/routes/user.routes.php';
 require_once './eagle/routes/team.routes.php';
 require_once './eagle/routes/event.routes.php';
 require_once './eagle/routes/comment.routes.php';
 require_once './eagle/routes/scouting.routes.php';
-
+require_once './eagle/routes/base.routes.php';
 
 $app->run();

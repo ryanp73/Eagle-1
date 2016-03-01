@@ -28,49 +28,52 @@ $app->group('/event', function() {
 			Downloader::getTeamsAtEvent($args['event']);
 			header('Refresh:0');
 		}
+                
+                if (strtotime($event->start_date) <= time()) 
+                {
 
-		$matches = FileReader::getMatchesAtEvent($args['event']);
+                    $matches = FileReader::getMatchesAtEvent($args['event']);
 
-		if (!count($matches))
-		{
+                    if (!count($matches))
+                    {
 			Downloader::getMatchesAtEvent($args['event']);
-			header('Refresh:0');
-		}
+                            header('Refresh:0');
+                    }
 
-		$types = array('f' => 'Finals', 'sf' => 'Semifinals', 'qf' => 'Quarter Final', 'qm' => 'Qualifier');
+                    $types = array('f' => 'Finals', 'sf' => 'Semifinals', 'qf' => 'Quarter Final', 'qm' => 'Qualifier');
 
-		foreach ($matches as $match) 
-		{
+                    foreach ($matches as $match) 
+                    {
 			$match->match_type = $types[$match->comp_level];
-		}
+                    }
 
-		$rankings = FileReader::getRankingsAtEvent($args['event']);
+                    $rankings = FileReader::getRankingsAtEvent($args['event']);
 
-		if (!count($rankings))
-		{
+                    if (!count($rankings))
+                    {
 			Downloader::getRankingsAtEvent($args['event']);
 			header('Refresh:0');
-		}
+                    }
 
-		$dlstats = FileReader::getStatsAtEvent($args['event']);
+                    $dlstats = FileReader::getStatsAtEvent($args['event']);
 
-		if (!$dlstats && !count($dlstats))
-		{
-			Downloader::getStatsAtEvent($args['event']);
-			header('Refresh:0');
-		}
+                    if (!$dlstats && !count($dlstats))
+                    {
+                        Downloader::getStatsAtEvent($args['event']);
+                        header('Refresh:0');
+                    }
 
-		$stats = array();
+                    $stats = array();
 
-		for ($i = 0; $i < count((array)$dlstats->oprs); $i++)
-		{
+                    for ($i = 0; $i < count((array)$dlstats->oprs); $i++)
+                    {
 			$tempTeam = array_keys((array)$dlstats->oprs)[$i];
 			$opr = $dlstats->oprs->{$tempTeam};
 			$dpr = $dlstats->dprs->{$tempTeam};
 			$ccwm = $dlstats->ccwms->{$tempTeam};
 			$stats[$tempTeam] = array('number' => $tempTeam, 'opr' => $opr, 'dpr' => $dpr, 'ccwm' => $ccwm);
-		}
-
+                    }
+                }
 		$this->view->render($res, 'event.html', [
 			'title' => $event->name,
 			'event' => $event,

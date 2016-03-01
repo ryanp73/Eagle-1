@@ -1,4 +1,5 @@
 data/
-app/config/*
+eagle/config/*
 vendor/
 composer.lock
+composer.phar

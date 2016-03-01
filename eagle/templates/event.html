@@ -25,7 +25,7 @@
 			{% endfor %}
 		</ul>
 	</div>
-	<div class="tab-pane" id="stats">
+	<div class="tab-pane table-responsive" id="stats">
 		<h3>Stats</h3>
 		<table class="table table-striped" id="tstats">
 			<thead>
@@ -177,7 +177,7 @@
 	$('#match-rs').on('click touchstart', function() {sort('tmatches',5,false)});
 	$('#match-bs').on('click touchstart', function() {sort('tmatches',9,false)});
 	$('#rank-rank').on('click touchstart', function() {sort('trankings',0,true)});
-	$('#rank-team').on('click touchstart', function() {sort('trankings',1,false)});
+	$('#rank-team').on('click touchstart', function() {sort('trankings',1,true)});
 	$('#rank-rp').on('click touchstart', function() {sort('trankings',2,false)});
 	$('#rank-auto').on('click touchstart', function() {sort('trankings',3,false)});
 	$('#rank-sc').on('click touchstart', function() {sort('trankings',4,false)});
