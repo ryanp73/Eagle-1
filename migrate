@@ -6,7 +6,8 @@ require_once './eagle/database/Connection.php';
 
 $conn = new Connection();
 
-if (isset($argv[1]))
+
+if (isset($argv[1]) && $argv[1] != 'migrate')
 {
 	$file = './eagle/database/migrations/' . $argv[1] . '.php';
 	require_once $file;
@@ -15,14 +16,14 @@ if (isset($argv[1]))
 	$obj->up();
 	echo $class . " Done\n";
 }
-else 
+else if (isset($argv[1]) && $argv[1] == 'migrate') 
 {
-	echo "Are you sure you want to migrate? [y/n]";
+	//echo "Are you sure you want to migrate? [y/n]";
 
-	$answer = trim(fgets(STDIN));
+	//$answer = trim(fgets(STDIN));
 
-	if ($answer == 'y' || $answer == 'Y')
-	{
+	//if ($answer == 'y' || $answer == 'Y')
+	//{
 		foreach (glob('./eagle/database/migrations/*.php') as $file)
 		{
 			require_once $file;
@@ -34,14 +35,15 @@ else
 
 			echo $class . " Done\n";
 		}
-	}
+	//}
 }
 
-echo "\nWould you like to seed the database? [y/n]";
+//echo "\nWould you like to seed the database? [y/n]";
 
-$answer = trim(fgets(STDIN));
+//$answer = trim(fgets(STDIN));
 
-if ($answer == 'y' || $answer == 'Y')
+//if ($answer == 'y' || $answer == 'Y')
+if (isset($argv[2]) && $argv[2] == 'seed')
 {
 	require_once './eagle/database/seeders/Seeder.php';
 	echo "Finished seeding";

@@ -5,12 +5,12 @@ class Auth
 
 	public static function hash($password)
 	{
-		return password_hash($password, PASSWORD_BCRYPT);
+		return crypt($password);
 	}
 
 	public static function checkPassword($password, $hashedPassword)
 	{
-		return password_verify($password, $hashedPassword);
+		return crypt($password, $hashedPassword);
 	}
 
 	public static function checkLoggedIn() 

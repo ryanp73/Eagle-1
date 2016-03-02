@@ -11,8 +11,8 @@ class Downloader
 
 	public static function getFromTba($urlCore)
 	{
-		$urlStart = 'https://thebluealliance.com/api/v2/';
-		$urlEnd   = '?X-TBA-App-Id=frc2410:scouting-ryan:v0.0.1';
+		$urlStart = 'http://thebluealliance.com/api/v2/';
+        $urlEnd   = '?X-TBA-App-Id=frc2410:scouting-ryan:v1.0.0';
 		return self::downloadFromUrl($urlStart . $urlCore . $urlEnd);
 	}
 

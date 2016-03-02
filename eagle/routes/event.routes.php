@@ -29,47 +29,51 @@ $app->group('/event', function() {
 			header('Refresh:0');
 		}
 
-		$matches = FileReader::getMatchesAtEvent($args['event']);
+	    if (strtotime($event->start_date) <= time()) 
+	    {
 
-		if (!count($matches))
-		{
-			Downloader::getMatchesAtEvent($args['event']);
-			header('Refresh:0');
-		}
+	        $matches = FileReader::getMatchesAtEvent($args['event']);
 
-		$types = array('f' => 'Finals', 'sf' => 'Semifinals', 'qf' => 'Quarter Final', 'qm' => 'Qualifier');
+	        if (!count($matches))
+	        {
+					Downloader::getMatchesAtEvent($args['event']);
+	                header('Refresh:0');
+	        }
 
-		foreach ($matches as $match) 
-		{
-			$match->match_type = $types[$match->comp_level];
-		}
+	        $types = array('f' => 'Finals', 'sf' => 'Semifinals', 'qf' => 'Quarter Final', 'qm' => 'Qualifier');
 
-		$rankings = FileReader::getRankingsAtEvent($args['event']);
+	        foreach ($matches as $match) 
+	        {
+				$match->match_type = $types[$match->comp_level];
+	        }
 
-		if (!count($rankings))
-		{
-			Downloader::getRankingsAtEvent($args['event']);
-			header('Refresh:0');
-		}
+	        $rankings = FileReader::getRankingsAtEvent($args['event']);
 
-		$dlstats = FileReader::getStatsAtEvent($args['event']);
+	        if (!count($rankings))
+	        {
+				Downloader::getRankingsAtEvent($args['event']);
+				header('Refresh:0');
+	        }
 
-		if (!$dlstats && !count($dlstats))
-		{
-			Downloader::getStatsAtEvent($args['event']);
-			header('Refresh:0');
-		}
+	        $dlstats = FileReader::getStatsAtEvent($args['event']);
 
-		$stats = array();
+	        if (!$dlstats && !count($dlstats))
+	        {
+	            Downloader::getStatsAtEvent($args['event']);
+	            header('Refresh:0');
+	        }
 
-		for ($i = 0; $i < count((array)$dlstats->oprs); $i++)
-		{
-			$tempTeam = array_keys((array)$dlstats->oprs)[$i];
-			$opr = $dlstats->oprs->{$tempTeam};
-			$dpr = $dlstats->dprs->{$tempTeam};
-			$ccwm = $dlstats->ccwms->{$tempTeam};
-			$stats[$tempTeam] = array('number' => $tempTeam, 'opr' => $opr, 'dpr' => $dpr, 'ccwm' => $ccwm);
-		}
+	        $stats = array();
+
+	        for ($i = 0; $i < count((array)$dlstats->oprs); $i++)
+	        {
+				$tempTeam = array_keys((array)$dlstats->oprs)[$i];
+				$opr = $dlstats->oprs->{$tempTeam};
+				$dpr = $dlstats->dprs->{$tempTeam};
+				$ccwm = $dlstats->ccwms->{$tempTeam};
+				$stats[$tempTeam] = array('number' => $tempTeam, 'opr' => $opr, 'dpr' => $dpr, 'ccwm' => $ccwm);
+            }
+        }
 
 		$this->view->render($res, 'event.html', [
 			'title' => $event->name,
@@ -91,4 +95,5 @@ $app->group('/event', function() {
 		FileReader::getRankingsAtEvent($args['event'], true);
 		return $res->withStatus(302)->withHeader('Location', '/event/' . $args['event']);
 	});
+
 });
