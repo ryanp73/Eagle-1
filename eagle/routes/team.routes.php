@@ -33,6 +33,37 @@ $app->group('/team', function() {
 			header('Refresh:0');
 		}
 
+		$pastEvents = array();
+		$futureEvents = array();
+		$types = array('f' => 'Finals', 'sf' => 'Semifinals', 'qf' => 'Quarter Final', 'qm' => 'Qualifier');
+
+		foreach ($events as $event)
+		{
+			if (strtotime($event->start_date) < time())
+			{
+				$event->matches = array();
+				$matches = FileReader::getMatchesAtEvent($event->key);
+				if (!$matches)
+				{
+					Downloader::getMatchesAtEvent($event->key);
+					header('Refresh:0');
+				}
+				foreach ($matches as $match)
+				{
+					if (strpos(json_encode($match), $args['team']))
+					{
+						$match->match_type = $types[$match->comp_level];
+						array_push($event->matches, $match);
+					}
+				}
+				array_push($pastEvents, $event);
+			}
+			else
+			{
+				array_push($futureEvents, $event);
+			}
+		}
+
 		$comments = Comment::where('team_id', $team->team_number);
 
 		$defense = Defense::where('team_id', $args['team'])->orderBy('id', 'desc')->first();
@@ -43,7 +74,7 @@ $app->group('/team', function() {
 		{
 			$defenses['Low Bar'] = $defense->low_bar;
 			$defenses['Portcullis'] = $defense->portcullis;
-			$defenses['Cheval de Frsie'] = $defense->cheval_de_frise;
+			$defenses['Cheval de Frise'] = $defense->cheval_de_frise;
 			$defenses['Moat'] = $defense->moat;
 			$defenses['Ramparts'] = $defense->ramparts;
 			$defenses['Drawbridge'] = $defense->drawbridge;
@@ -56,7 +87,8 @@ $app->group('/team', function() {
 		return $this->view->render($res, 'team.html', [
 			'title'  => 'Team ' . $team->team_number,
 			'team'   => $team,
-			'events' => $events,
+			'events' => $futureEvents,
+			'pastEvents' => $pastEvents,
 			'numComments' => Comment::where('team_id', $team->team_number)->count(),
 			'comment' => Comment::where('team_id', $team->team_number)->first(),
 			'defenseExists' => $defense,

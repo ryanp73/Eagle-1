@@ -62,18 +62,7 @@
 			</thead>
 			<tbody>
 			{% for match in matches %}
-				<tr>
-					<td>{{ match.match_type }}</td>
-					<td class="{% if match.alliances.red.score > match.alliances.blue.score %} danger {% elseif match.alliances.red.score < match.alliances.blue.score %} info {% endif %}"><a href="/match/{{ match.key }}">{{ match.match_number }}</a></td>
-					{% for team in match.alliances.red.teams %}
-					<td class="danger"><a href="/team/{{ team[3:] }}">{{ team[3:] }}</a></td>
-					{% endfor %}
-					<td class="danger">{{ match.alliances.red.score }}</td>
-					{% for team in match.alliances.blue.teams %}
-					<td class="info"><a href="/team/{{ team[3:] }}">{{ team[3:] }}</a></td>
-					{% endfor %}
-					<td class="info">{{ match.alliances.blue.score }}</td>
-				</tr>
+				{% include 'partials/simple_match.html' %}
 			{% endfor %}
 			</tbody>
 		</table>
@@ -110,84 +99,29 @@
 	</div>
 </div>
 
+<script src="/public/scripts/utils.js"></script>
 <script type="text/javascript">
-	function getValue(array, index, column) 
-	{
-		if (isNaN($(array[index].children[column]).text()))
-		{
-			return $(array[index].children[column]).text();
-		}
-		return parseInt($(array[index].children[column]).text());
-	}
-
-	function sort(table, column, isReversed) 
-	{
-		if (!isReversed)
-		{
-			var trs = $('#' + table + '>tbody>tr').get();
-			for (var i = 0; i < trs.length - 1; i++)
-			{
-				for (var j = i + 1; j < trs.length; j++)
-				{
-					var maxValue = getValue(trs, i, column);
-					var maxIndex = i;
-					if (getValue(trs, j, column) > maxValue)
-					{
-						temp = trs[j];
-						trs[j] = trs[maxIndex];
-						trs[maxIndex] = temp;
-						maxIndex = j;
-						maxValue = getValue(trs, maxIndex, column);
-					}
-				}
-			}
-		}
-		else
-		{
-			var trs = $('#' + table + '>tbody>tr').get();
-			for (var i = 0; i < trs.length - 1; i++)
-			{
-				for (var j = i + 1; j < trs.length; j++)
-				{
-					var minValue = getValue(trs, i, column);
-					var minIndex = i;
-					if (getValue(trs, j, column) < minValue)
-					{
-						temp = trs[j];
-						trs[j] = trs[minIndex];
-						trs[minIndex] = temp;
-						minIndex = j;
-						minValue = getValue(trs, minIndex, column);
-					}
-				}
-			}
-		}
-		for (var i = 0; i < trs.length; i++)
-		{
-			$('#' + table + '>tbody>tr:last').after($(trs[i]));
-		}
-	}
 
 	// Pardon the messiness of this
-	$('#stats-number').on('click touchstart', function() {sort('tstats',0,true)});
-	$('#stats-opr').on('click touchstart', function() {sort('tstats',1,false)});
-	$('#stats-dpr').on('click touchstart', function() {sort('tstats',2,false)});
-	$('#stats-ccwm').on('click touchstart', function() {sort('tstats',3,false)});
-	$('#match-type').on('click touchstart', function() {sort('tmatches',0,true)});
-	$('#match-number').on('click touchstart', function() {sort('tmatches',1,true)});
-	$('#match-rs').on('click touchstart', function() {sort('tmatches',5,false)});
-	$('#match-bs').on('click touchstart', function() {sort('tmatches',9,false)});
-	$('#rank-rank').on('click touchstart', function() {sort('trankings',0,true)});
-	$('#rank-team').on('click touchstart', function() {sort('trankings',1,true)});
-	$('#rank-rp').on('click touchstart', function() {sort('trankings',2,false)});
-	$('#rank-auto').on('click touchstart', function() {sort('trankings',3,false)});
-	$('#rank-sc').on('click touchstart', function() {sort('trankings',4,false)});
-	$('#rank-goals').on('click touchstart', function() {sort('trankings',5,false)});
-	$('#rank-defense').on('click touchstart', function() {sort('trankings',6,false)});
-	$('#rank-record').on('click touchstart', function() {sort('trankings',7,false)});
-	$('#rank-played').on('click touchstart', function() {sort('trankings',8,false)});
+	$('#stats-number').on('click touchstart', function(e) {sort(e,0,true)});
+	$('#stats-opr').on('click touchstart', function(e) {sort(e,1,false)});
+	$('#stats-dpr').on('click touchstart', function(e) {sort(e,2,false)});
+	$('#stats-ccwm').on('click touchstart', function(e) {sort(e,3,false)});
+	$('#match-type').on('click touchstart', function(e) {sort(e,0,true)});
+	$('#match-number').on('click touchstart', function(e) {sort(e,1,true)});
+	$('#match-rs').on('click touchstart', function(e) {sort(e,5,false)});
+	$('#match-bs').on('click touchstart', function(e) {sort(e,9,false)});
+	$('#rank-rank').on('click touchstart', function(e) {sort(e,0,true)});
+	$('#rank-team').on('click touchstart', function(e) {sort(e,1,true)});
+	$('#rank-rp').on('click touchstart', function(e) {sort(e,2,false)});
+	$('#rank-auto').on('click touchstart', function(e) {sort(e,3,false)});
+	$('#rank-sc').on('click touchstart', function(e) {sort(e,4,false)});
+	$('#rank-goals').on('click touchstart', function(e) {sort(e,5,false)});
+	$('#rank-defense').on('click touchstart', function(e) {sort(e,6,false)});
+	$('#rank-record').on('click touchstart', function(e) {sort(e,7,false)});
+	$('#rank-played').on('click touchstart', function(e) {sort(e,8,false)});
 
-	$('#update').on('click touchstart',function(e) {
+	$('#update').on('click touchstart', function(e) {
 		e.preventDefault();
 		window.location.href = '/event/{{ event.key }}/update';
 	});

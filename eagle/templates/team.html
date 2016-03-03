@@ -8,7 +8,7 @@
 {% if pitScoutingData != false %}
 {% include 'partials/pit_scouting_partial.html' %}
 {% else %}
-<table class="table table-striped">
+<table class="table table-striped" id="scouting">
 {% endif %}
 
 {% if defenseExists != false %}
@@ -35,35 +35,85 @@
 
 <h4>Events</h4>
 
-<ul>
+<ul id="events">
 {% for event in events %}
-	<li><a href="/event/{{ event.key }}">{{ event.name }}</a></li>
+	<li class="event">
+		<a href="/event/{{ event.key }}">{{ event.name }}</a>
+		<span class="label label-primary">{{ event.start_date | date('F d') }} - {{ event.end_date | date('F d') }}</span>
+	</li>
+{% endfor %}
+{% for event in pastEvents %}
+	<li class="event">
+		<a href="/event/{{ event.key }}">{{ event.name }}</a>
+		<span class="label label-danger">{{ event.start_date | date('F d') }} - {{ event.end_date | date('F d') }}</span>
+	</li>
 {% endfor %}
 </ul>
 
+{% if pastEvents %}
+<ul class="nav nav-tabs" role="tablist">
+	<li class="active"><a href="#{{ pastEvents[0].name }}" data-toggle="tab">{{ pastEvents[0].name }}</a></li>
+	{% for event in pastEvents[1:] %}
+		<li><a href="#{{ event.name }}" data-toggle="tab">{{ event.name }}</a></li>
+	{% endfor %}
+</ul>
+
+<div class="tab-content">
+	<div class="tab-pane tab-responsive active" id="{{ pastEvents[0].name }}">
+		<table class="table">
+			<thead>
+				<th id="match-type">Match Type</th>
+				<th id="match-number">Match Number</th>
+				<th id="match-rt1">Red Team 1</th>
+				<th id="match-rt2">Red Team 2</th>
+				<th id="match-rt3">Red Team 3</th>
+				<th id="match-rs">Red Score</th>
+				<th id="match-bt1">Blue Team 1</th>
+				<th id="match-bt2">Blue Team 2</th>
+				<th id="match-bt3">Blue Team 3</th>
+				<th id="match-bs">Blue Score</th>
+			</thead>
+			<tbody>
+				{% for match in pastEvents[0].matches %}
+					{% include 'partials/simple_match.html' %}
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	{% for event in pastEvents[1:] %}
+		<div class="tab-pane tab-responsive" id="{{ event.name }}">
+			<table class="table">
+				<thead>
+					<th id="match-type">Match Type</th>
+					<th id="match-number">Match Number</th>
+					<th id="match-rt1">Red Team 1</th>
+					<th id="match-rt2">Red Team 2</th>
+					<th id="match-rt3">Red Team 3</th>
+					<th id="match-rs">Red Score</th>
+					<th id="match-bt1">Blue Team 1</th>
+					<th id="match-bt2">Blue Team 2</th>
+					<th id="match-bt3">Blue Team 3</th>
+					<th id="match-bs">Blue Score</th>
+				</thead>
+				<tbody>
+					{% for match in event.matches %}
+						{% include 'partials/simple_match.html' %}
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	{% endfor %}
+</div>
+{% endif %}
+
+<script src="/public/scripts/utils.js"></script>
 <script>
-	$.each($('td').toArray(), function(i, el) {
-		text = $(el).text();
-		if (parseInt(text) != NaN)
-		{ 
-			if ($(el).prev().text().indexOf('Number') == -1)
-			{
-				console.log(parseInt(text));
-				if (parseInt(text) == 0) 
-				{
-					$(el).text("Cannot perform task.");
-				}
-				else if (parseInt(text) == 1)
-				{
-					$(el).text("Can perform inconsistently.");
-				}
-				else if (parseInt(text) == 2)
-				{
-					$(el).text("Can perform consistently.");
-				}
-			}
-		} 
-	});
+	defenseRatingText('#scouting');
+	sortEvents();
+	$('#match-type').on('click touchstart', function(e) {sort(e,0,true)});
+	$('#match-number').on('click touchstart', function(e) {sort(e,1,true)});
+	$('#match-rs').on('click touchstart', function(e) {sort(e,5,false)});
+	$('#match-bs').on('click touchstart', function(e) {sort(e,9,false)});
 </script>
 
 {% include "partials/footer.html" %}
