@@ -39,6 +39,7 @@ $app->group('/team', function() {
 		$types = array('f' => 'Finals', 'sf' => 'Semifinals', 'qf' => 'Quarter Final', 'qm' => 'Qualifier');
 
 		$matches = array();
+		$awards = array();
 
 		foreach ($events as $event)
 		{
@@ -46,11 +47,13 @@ $app->group('/team', function() {
 			{
 				array_push($pastEvents, $event);
 				$ms = FileReader::getMatchesForTeam($team->team_number, $event->key);
+				$as = FileReader::getMatchesForTeam($team->team_number, $event->key);
 				foreach ($ms as $m) 
 				{
 					$m->match_type = $types[$m->comp_level];
 				}
 				array_push($matches, $ms);
+				array_push($awards, $as);
 			}
 			else
 			{
@@ -65,12 +68,9 @@ $app->group('/team', function() {
 				Downloader::getMatchesForTeam($team->team_number, $event->key);
 				header('Refresh:0');
 			}
-		}
+		}		
 
-		$awards = FileReader::getAwardsForTeam($team->team_number, $event->key);
-				
-
-		if ($awards == false && count($pastEvents))
+		if ($awards[0] == false && count($pastEvents))
 		{
 			foreach ($pastEvents as $event)
 			{			
