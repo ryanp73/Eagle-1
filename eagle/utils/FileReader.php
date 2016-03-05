@@ -49,7 +49,7 @@ class FileReader
 			Downloader::getAwardsForTeam($teamId);
 		}
 
-		$filename = './data/' . $teamId . '/awards.json';
+		$filename = './data/' . $teamId . '/' . $eventId . '-awards.json';
 		return self::readFile($filename);
 	}
 
