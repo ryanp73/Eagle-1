@@ -22,15 +22,52 @@ class Utils
 
 	public static function getCurrentEvent() 
 	{
-		$pivot = strtotime('2016-03-14');
-		if (time() < $pivot) 
+		/*$pivot = strtotime('2016-03-14');
+		if (isBeforeNow($pivot)) 
 		{
 			return '2016mokc';
 		} 
 		else
 		{
 			return '2016iacf';
-		}
+		}*/
+		return (self::isBeforeNow('2016-03-14')) ? '2016mokc' : '2016iacf';
+	}
+
+	public static function isEventOccuring($event)
+	{
+		return self::isAfterNow($event->start_date)
+				&& self::isBeforeNow(self::addADay($event->end_date));
+	}
+
+	public static function isBefore($date1, $date2)
+	{
+		return strtotime($date1) < strtotime($date2);
+	}
+
+	public static function isBeforeNow($date)
+	{
+		return strtotime($date) > time();
+	}
+
+	public static function isAfterNow($date)
+	{
+		return strtotime($date) < time();
+	}
+
+	public static function isAfter($date1, $date2)
+	{
+		return strtotime($date1) > strtotime($date2);
+	}
+
+	public static function averageArray($array)
+	{
+		return array_sum($array) / count($array);
+	}
+
+	public static function addADay($date)
+	{
+		return strtotime($date) + 86400;
 	}
 
 }

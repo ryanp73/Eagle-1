@@ -3,6 +3,7 @@
 require_once './eagle/utils/Downloader.php';
 require_once './eagle/utils/FileReader.php';
 require_once './eagle/utils/Auth.php';
+require_once './eagle/utils/Utils.php';
 require_once './eagle/models/Comment.php';
 require_once './eagle/models/Defense.php';
 require_once './eagle/models/PitScouting.php';
@@ -37,30 +38,32 @@ $app->group('/team', function() {
 		$futureEvents = array();
 		$types = array('f' => 'Finals', 'sf' => 'Semifinals', 'qf' => 'Quarter Final', 'qm' => 'Qualifier');
 
+		$matches = array();
+
 		foreach ($events as $event)
 		{
-			if (strtotime($event->start_date) < time())
+			if (Utils::isAfterNow($event->start_date))
 			{
-				$event->matches = array();
-				$matches = FileReader::getMatchesAtEvent($event->key);
-				if (!$matches)
-				{
-					Downloader::getMatchesAtEvent($event->key);
-					header('Refresh:0');
-				}
-				foreach ($matches as $match)
-				{
-					if (strpos(json_encode($match), $args['team']))
-					{
-						$match->match_type = $types[$match->comp_level];
-						array_push($event->matches, $match);
-					}
-				}
 				array_push($pastEvents, $event);
+				$ms = FileReader::getMatchesForTeam($team->team_number, $event->key);
+				foreach ($ms as $m) 
+				{
+					$m->match_type = $types[$m->comp_level];
+				}
+				array_push($matches, $ms);
 			}
 			else
 			{
 				array_push($futureEvents, $event);
+			}
+		}
+
+		if (!$matches[0] && count($pastEvents))
+		{
+			foreach ($pastEvents as $event)
+			{			
+				Downloader::getMatchesForTeam($team->team_number, $event->key);
+				header('Refresh:0');
 			}
 		}
 
@@ -89,6 +92,7 @@ $app->group('/team', function() {
 			'team'   => $team,
 			'events' => $futureEvents,
 			'pastEvents' => $pastEvents,
+			'matches' => $matches,
 			'numComments' => Comment::where('team_id', $team->team_number)->count(),
 			'comment' => Comment::where('team_id', $team->team_number)->first(),
 			'defenseExists' => $defense,

@@ -90,7 +90,7 @@ function sortEvents()
 
 function defenseRatingText(table)
 {
-	$.each($(table + '>td').toArray(), function(i, el) {
+	$.each($(table + ' td').toArray(), function(i, el) {
 		text = $(el).text();
 		if (parseInt(text) != NaN)
 		{ 

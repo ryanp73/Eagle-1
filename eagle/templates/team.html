@@ -74,7 +74,7 @@
 				<th id="match-bs">Blue Score</th>
 			</thead>
 			<tbody>
-				{% for match in pastEvents[0].matches %}
+				{% for match in matches[0] %}
 					{% include 'partials/simple_match.html' %}
 				{% endfor %}
 			</tbody>
@@ -96,7 +96,7 @@
 					<th id="match-bs">Blue Score</th>
 				</thead>
 				<tbody>
-					{% for match in event.matches %}
+					{% for match in matches[1:] %}
 						{% include 'partials/simple_match.html' %}
 					{% endfor %}
 				</tbody>

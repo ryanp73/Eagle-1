@@ -1,5 +1,7 @@
 <?php
 
+require_once './eagle/utils/Utils.php';
+
 class FileReader
 {
 
@@ -36,6 +38,18 @@ class FileReader
 		}
 
 		$filename = './data/' . $teamId . '/events.json';
+		return self::readFile($filename);
+	}
+
+	public static function getMatchesForTeam($teamId, $eventId, $update = false)
+	{
+		if ($update)
+		{
+			require_once './eagle/utils/Downloader.php';
+			Downloader::getMatchesForTeam($teamId, $eventId);
+		}
+
+		$filename = './data/' . $teamId . '/' . $eventId . '-matches.json';
 		return self::readFile($filename);
 	}
 
@@ -97,6 +111,24 @@ class FileReader
 
 		$filename = './data/' . $eventId . '/rankings.json';
 		return self::readFile($filename);
+	}
+
+	public static function getAwardsAtEvent($eventId, $update = false)
+	{
+		if ($update)
+		{
+			require_once './eagle/utils/Downloader.php';
+			Downloader::getAwardsAtEvent($eventId);
+		}
+
+		$filename = './data/' . $eventId . '/awards.json';
+		return self::readFile($filename);
+	}
+
+	private static function isOldFile($filePath, $dateToCheck) 
+	{
+		// Add a day just to add a little extra
+		return Utils::isAfter(filemtime($filePath), Utils::addADay($dateToCheck));
 	}
 
 }
