@@ -41,7 +41,7 @@ class FileReader
 		return self::readFile($filename);
 	}
 
-	public static function getAwardsForTeam($teamId, $update = false)
+	public static function getAwardsForTeam($teamId, $eventId, $update = false)
 	{
 		if ($update)
 		{
