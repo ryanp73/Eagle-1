@@ -50,6 +50,16 @@ class Downloader
 		self::writeDataToFile($filename, $teamEvents);
 	}
 
+	public static function getAwardsForTeam($teamId, $eventId) 
+	{
+		$urlCore  = 'team/frc' . $teamId . '/event/' . $eventId . '/awards';
+		$teamEvents = self::getFromTba($urlCore);
+
+		$filename = './data/' . $teamId . '/' . $eventId . '-awards.json';
+
+		self::writeDataToFile($filename, $teamEvents);
+	}
+
 	public static function getMatchesForTeam($teamId, $eventId) 
 	{
 		$urlCore  = 'team/frc' . $teamId . '/event/' . $eventId . '/matches';

@@ -67,6 +67,18 @@ $app->group('/team', function() {
 			}
 		}
 
+		$awards = FileReader::getAwardsForTeam($team->team_number, $event->key);
+				
+
+		if ($awards == false && count($pastEvents))
+		{
+			foreach ($pastEvents as $event)
+			{			
+				Downloader::getAwardsForTeam($team->team_number, $event->key);
+				header('Refresh:0');
+			}
+		}
+
 		$comments = Comment::where('team_id', $team->team_number);
 
 		$defense = Defense::where('team_id', $args['team'])->orderBy('id', 'desc')->first();
@@ -93,6 +105,7 @@ $app->group('/team', function() {
 			'events' => $futureEvents,
 			'pastEvents' => $pastEvents,
 			'matches' => $matches,
+			'awards' => $awards,
 			'numComments' => Comment::where('team_id', $team->team_number)->count(),
 			'comment' => Comment::where('team_id', $team->team_number)->first(),
 			'defenseExists' => $defense,

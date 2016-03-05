@@ -2,6 +2,10 @@ function getValue(array, index, column)
 {
 	if (isNaN($(array[index].children[column]).text()))
 	{
+		if ($array[index].children[column].find('a'))
+		{
+			return parseInt($(array[index].children[column]).find('a').text());
+		}
 		return $(array[index].children[column]).text();
 	}
 	return parseInt($(array[index].children[column]).text());
