@@ -41,6 +41,18 @@ class FileReader
 		return self::readFile($filename);
 	}
 
+	public static function getAwardsForTeam($teamId, $update = false)
+	{
+		if ($update)
+		{
+			require_once './eagle/utils/Downloader.php';
+			Downloader::getAwardsForTeam($teamId);
+		}
+
+		$filename = './data/' . $teamId . '/awards.json';
+		return self::readFile($filename);
+	}
+
 	public static function getMatchesForTeam($teamId, $eventId, $update = false)
 	{
 		if ($update)
