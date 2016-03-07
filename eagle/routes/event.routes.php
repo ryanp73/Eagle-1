@@ -3,6 +3,7 @@
 require_once './eagle/utils/Downloader.php';
 require_once './eagle/utils/FileReader.php';
 require_once './eagle/utils/Auth.php';
+require_once './eagle/utils/Utils.php';
 
 $app->group('/event', function() {
 
@@ -11,7 +12,34 @@ $app->group('/event', function() {
 		exit();
 	});
 
-	$this->get('/{event:\d{4}[A-Za-z]{1,4}}', function($req, $res, $args) {
+	$this->get('/all', function($req, $res, $args) {
+		$events = FileReader::getAllEvents();
+		if (!$events)
+		{
+			Downloader::getAllEvents();
+			header('Refresh:0');
+			exit();
+		}
+
+		foreach ($events as $event) {
+			if (strtotime($event->end_date) < time())
+			{
+				$event->hasOccurred = 'past';
+			}
+			else if (Utils::isEventOccuring($event))
+			{
+				$event->hasOccurred = 'current';
+			}
+		}
+
+		$this->view->render($res, 'eventDirectory.html', [
+			'title' => 'Event Directory',
+			'events' => $events,
+			'user'  => Auth::getLoggedInUser()
+		]);
+	});
+
+	$this->get('/{event:\d{4}[A-Za-z]{1,4}\d?}', function($req, $res, $args) {
 		Auth::redirectIfNotLoggedIn();
 
 		$event = FileReader::getEvent($args['event']);
@@ -19,6 +47,7 @@ $app->group('/event', function() {
 		{
 			Downloader::getEvent($args['event']);
 			header('Refresh:0');
+			exit();
 		}
 
 		$teams = FileReader::getTeamsAtEvent($args['event']);
@@ -27,9 +56,10 @@ $app->group('/event', function() {
 		{
 			Downloader::getTeamsAtEvent($args['event']);
 			header('Refresh:0');
+			exit();
 		}
 
-	    if (strtotime($event->start_date) <= time()) 
+	    if (Utils::isAfterNow($event->start_date)) 
 	    {
 
 	        $matches = FileReader::getMatchesAtEvent($args['event']);
@@ -38,6 +68,7 @@ $app->group('/event', function() {
 	        {
 					Downloader::getMatchesAtEvent($args['event']);
 	                header('Refresh:0');
+	                exit();
 	        }
 
 	        $types = array('f' => 'Finals', 'sf' => 'Semifinals', 'qf' => 'Quarter Final', 'qm' => 'Qualifier');
@@ -53,6 +84,7 @@ $app->group('/event', function() {
 	        {
 				Downloader::getRankingsAtEvent($args['event']);
 				header('Refresh:0');
+				exit();
 	        }
 
 	        $dlstats = FileReader::getStatsAtEvent($args['event']);
@@ -61,6 +93,7 @@ $app->group('/event', function() {
 	        {
 	            Downloader::getStatsAtEvent($args['event']);
 	            header('Refresh:0');
+	            exit();
 	        }
 
 	        $stats = array();
@@ -73,6 +106,22 @@ $app->group('/event', function() {
 				$ccwm = $dlstats->ccwms->{$tempTeam};
 				$stats[$tempTeam] = array('number' => $tempTeam, 'opr' => $opr, 'dpr' => $dpr, 'ccwm' => $ccwm);
             }
+
+            $awards = FileReader::getAwardsAtEvent($event->key);
+
+	        if (!count($awards))
+	        {
+				Downloader::getAwardsAtEvent($args['event']);
+				header('Refresh:0');
+				exit();
+	        }
+        }
+        else
+        {
+        	$stats = array();
+        	$rankings = array();
+        	$matches = array();
+        	$awards = array();
         }
 
 		$this->view->render($res, 'event.html', [
@@ -80,19 +129,21 @@ $app->group('/event', function() {
 			'event' => $event,
 			'teams' => $teams,
 			'stats' => $stats,
+			'awards' => $awards,
 			'rankings' => $rankings,
 			'matches' => $matches,
 			'user'  => Auth::getLoggedInUser()
 		]);
 	});
 
-	$this->get('/{event:\d{4}[A-Za-z]{1,4}}/update', function($req, $res, $args) {
+	$this->get('/{event:\d{4}[A-Za-z]{1,4}\d?}/update', function($req, $res, $args) {
 		Auth::redirectIfNotLoggedIn();
 		FileReader::getEvent($args['event'], true);
 		FileReader::getTeamsAtEvent($args['event'], true);
 		FileReader::getMatchesAtEvent($args['event'], true);
 		FileReader::getStatsAtEvent($args['event'], true);
 		FileReader::getRankingsAtEvent($args['event'], true);
+		FileReader::getAwardsAtEvent($args['event'], true);
 		return $res->withStatus(302)->withHeader('Location', '/event/' . $args['event']);
 	});
 

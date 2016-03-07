@@ -2,7 +2,11 @@ function getValue(array, index, column)
 {
 	if (isNaN($(array[index].children[column]).text()))
 	{
-		if ($array[index].children[column].find('a'))
+		if (isNaN($(array[index].children[column]).find('a').text()))
+		{
+			return $(array[index].children[column]).find('a').text();	
+		}
+		else
 		{
 			return parseInt($(array[index].children[column]).find('a').text());
 		}
@@ -14,7 +18,7 @@ function getValue(array, index, column)
 function sort(e, column, isReversed) 
 {
 	table = $(e.target).closest('table');
-	console.log(e);
+	
 	if (!isReversed)
 	{
 		var trs = $(table).find('tbody>tr').get();

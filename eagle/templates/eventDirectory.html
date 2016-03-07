@@ -1,0 +1,38 @@
+{% include 'partials/header.html' %}
+
+<h2>All Events</h2>
+
+<table class="table table-responsive">
+<thead>
+	<th id="event">Event</th>
+	<th id="dates">Dates</th>
+</thead>
+<tbody>
+{% for event in events %}
+	{% if event.hasOccurred == "past" %}
+	<tr class="danger">
+		<td><a href="/event/{{ event.key }}">{{ event.name }}</a></td>
+		<td>{{ event.start_date | date('m/d') }} - {{ event.end_date | date('m/d') }}</td>
+	</tr>
+	{% elseif event.hasOccurred == "current" %}
+	<tr class="warning">
+		<td><a href="/event/{{ event.key }}">{{ event.name }}</a></td>
+		<td>{{ event.start_date | date('m/d') }} - {{ event.end_date | date('m/d') }}</td>
+	</tr>
+	{% else %}
+	<tr class="info">
+		<td><a href="/event/{{ event.key }}">{{ event.name }}</a></td>
+		<td>{{ event.start_date | date('m/d') }} - {{ event.end_date | date('m/d') }}</td>
+	</tr>
+	{% endif %}
+{% endfor %}
+</tbody>
+</table>
+
+<script src="/public/scripts/utils.js"></script>
+<script>
+	$('#event').on('click touchstart', function(e) {sort(e,0,true)});
+	$('#dates').on('click touchstart', function(e) {sort(e,1,true)});
+</script>
+
+{% include 'partials/footer.html' %}

@@ -82,6 +82,16 @@ class Downloader
 		self::getTeamsAtEvent($eventId);
 	}
 
+	public static function getAllEvents()
+	{
+		$urlCore  = 'events/2016';
+		$events = self::getFromTba($urlCore);
+
+		$filename = './data/events.json';
+
+		self::writeDataToFile($filename, $events);
+	}
+
 	public static function getTeamsAtEvent($eventId)
 	{
 		$urlCore  = 'event/' . $eventId . '/teams';
@@ -118,6 +128,16 @@ class Downloader
 		$teamsAtEvent = self::getFromTba($urlCore);
 
 		$filename = './data/' . $eventId . '/rankings.json';
+
+		self::writeDataToFile($filename, $teamsAtEvent);
+	}
+
+	public static function getAwardsAtEvent($eventId)
+	{
+		$urlCore  = 'event/' . $eventId . '/awards';
+		$teamsAtEvent = self::getFromTba($urlCore);
+
+		$filename = './data/' . $eventId . '/awards.json';
 
 		self::writeDataToFile($filename, $teamsAtEvent);
 	}

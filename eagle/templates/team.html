@@ -60,6 +60,38 @@
 
 <div class="tab-content">
 	<div class="tab-pane tab-responsive active" id="{{ pastEvents[0].name }}">
+		<h3>Awards</h3>
+		{% for award in awards[0] %}
+			<div>{{ award.name }}</div>
+		{% endfor %}
+		<h3>Rankings</h3>
+		<table class="table" id="trankings">
+			<thead>
+				<th id="rank-rank">Ranking</th>
+				<th id="rank-team">Team Number</th>
+				<th id="rank-rp">Ranking Points</th>
+				<th id="rank-auto">Auto Points</th>
+				<th id="rank-sc">Scale/Challenge Points</th>
+				<th id="rank-goals">Goals Points</th>
+				<th id="rank-defense">Defense Points</th>
+				<th id="rank-record">Record</th>
+				<th id="rank-played">Matches Played</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{ rankings[0] }}</td>
+					<td><a href="/team/{{ rankings[1] }}">{{ rankings[1] }}</a></td>
+					<td>{{ rankings[2] }}</td>
+					<td>{{ rankings[3] }}</td>
+					<td>{{ rankings[4] }}</td>
+					<td>{{ rankings[5] }}</td>
+					<td>{{ rankings[6] }}</td>
+					<td>{{ rankings[7] }}</td>
+					<td>{{ rankings[8] }}</td>
+				</tr>
+			</tbody>
+		</table>
+		<h3>Matches</h3>
 		<table class="table">
 			<thead>
 				<th id="match-type">Match Type</th>
@@ -79,9 +111,6 @@
 				{% endfor %}
 			</tbody>
 		</table>
-		{% for award in awards %}
-			<div>{{ award.name }}</div>
-		{% endfor %}
 	</div>
 	{% for event in pastEvents[1:] %}
 		<div class="tab-pane tab-responsive" id="{{ event.name }}">

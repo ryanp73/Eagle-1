@@ -14,6 +14,7 @@
 	<li><a href="#stats" data-toggle="tab">Stats</a></li>
 	<li><a href="#matches" data-toggle="tab">Matches</a></li>
 	<li><a href="#rankings" data-toggle="tab">Rankings</a></li>
+	<li><a href="#awards" data-toggle="tab">Awards</a></li>
 </ul>
 
 <div class="tab-content">
@@ -92,6 +93,27 @@
 					<td>{{ ranking[6] }}</td>
 					<td>{{ ranking[7] }}</td>
 					<td>{{ ranking[8] }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div class="tab-pane table-responsive" id="awards">
+		<h3>Awards</h3>
+		<table class="table">
+			<thead>
+				<th>Award</th>
+				<th>Winner</th>
+			</thead>
+			<tbody>
+				{% for award in awards %}
+				<tr>
+					<td>{{ award.name }}</td>
+					<td>
+						{% for team in award.recipient_list %}
+						<a href="/team/{{ team.team_number }}">{{ team.team_number }}</a>
+						{% endfor %}
+					</td>
 				</tr>
 				{% endfor %}
 			</tbody>

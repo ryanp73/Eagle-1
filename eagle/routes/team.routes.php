@@ -47,7 +47,7 @@ $app->group('/team', function() {
 			{
 				array_push($pastEvents, $event);
 				$ms = FileReader::getMatchesForTeam($team->team_number, $event->key);
-				$as = FileReader::getMatchesForTeam($team->team_number, $event->key);
+				$as = FileReader::getAwardsForTeam($team->team_number, $event->key);
 				foreach ($ms as $m) 
 				{
 					$m->match_type = $types[$m->comp_level];
@@ -79,6 +79,16 @@ $app->group('/team', function() {
 			}
 		}
 
+		$rankings = FileReader::getRankingsAtEvent($event->key);
+
+		foreach ($rankings as $ranking)
+		{
+			if ($ranking[1] == $args['team'])
+			{
+				$rankings = $ranking;
+			}
+		}
+
 		$comments = Comment::where('team_id', $team->team_number);
 
 		$defense = Defense::where('team_id', $args['team'])->orderBy('id', 'desc')->first();
@@ -106,6 +116,7 @@ $app->group('/team', function() {
 			'pastEvents' => $pastEvents,
 			'matches' => $matches,
 			'awards' => $awards,
+			'rankings' => $rankings,
 			'numComments' => Comment::where('team_id', $team->team_number)->count(),
 			'comment' => Comment::where('team_id', $team->team_number)->first(),
 			'defenseExists' => $defense,

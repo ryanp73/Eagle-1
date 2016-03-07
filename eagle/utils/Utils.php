@@ -22,15 +22,6 @@ class Utils
 
 	public static function getCurrentEvent() 
 	{
-		/*$pivot = strtotime('2016-03-14');
-		if (isBeforeNow($pivot)) 
-		{
-			return '2016mokc';
-		} 
-		else
-		{
-			return '2016iacf';
-		}*/
 		return (self::isBeforeNow('2016-03-14')) ? '2016mokc' : '2016iacf';
 	}
 
@@ -38,6 +29,11 @@ class Utils
 	{
 		return self::isAfterNow($event->start_date)
 				&& self::isBeforeNow(self::addADay($event->end_date));
+	}
+
+	public static function hasEventPast($event)
+	{
+		return self::isAfterNow(self::addADay($event->end_date));
 	}
 
 	public static function isBefore($date1, $date2)

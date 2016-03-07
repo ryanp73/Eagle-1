@@ -77,6 +77,18 @@ class FileReader
 		return self::readFile($filename);
 	}
 
+	public static function getAllEvents($update = false)
+	{
+		if ($update)
+		{
+			require_once './eagle/utils/Downloader.php';
+			Downloader::getAllEvents();
+		}
+		
+		$filename = './data/events.json';
+		return self::readFile($filename);
+	}
+
 	public static function getTeamsAtEvent($eventId, $update = false)
 	{
 		if ($update)
