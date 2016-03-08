@@ -33,7 +33,7 @@ class Utils
 
 	public static function hasEventPast($event)
 	{
-		return self::isAfterNow(self::addADay($event->end_date));
+		return self::isBeforeNow(self::addADay($event->end_date));
 	}
 
 	public static function isBefore($date1, $date2)

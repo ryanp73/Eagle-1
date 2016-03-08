@@ -39,7 +39,7 @@ $app->group('/event', function() {
 		]);
 	});
 
-	$this->get('/{event:\d{4}[A-Za-z]{1,4}\d?}', function($req, $res, $args) {
+	$this->get('/{event:\d{4}[A-Za-z]{2,5}\d?}', function($req, $res, $args) {
 		Auth::redirectIfNotLoggedIn();
 
 		$event = FileReader::getEvent($args['event']);
@@ -136,7 +136,7 @@ $app->group('/event', function() {
 		]);
 	});
 
-	$this->get('/{event:\d{4}[A-Za-z]{1,4}\d?}/update', function($req, $res, $args) {
+	$this->get('/{event:\d{4}[A-Za-z]{2,5}\d?}/update', function($req, $res, $args) {
 		Auth::redirectIfNotLoggedIn();
 		FileReader::getEvent($args['event'], true);
 		FileReader::getTeamsAtEvent($args['event'], true);
