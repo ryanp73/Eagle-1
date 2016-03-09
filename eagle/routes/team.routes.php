@@ -51,7 +51,48 @@ $app->group('/team', function() {
 				$ms = FileReader::getMatchesForTeam($team->team_number, $event->key);
 				$as = FileReader::getAwardsForTeam($team->team_number, $event->key);
 				$ss = FileReader::getStatsAtEvent($event->key);	
-				$rs = FileReader::getRankingsAtEvent($event->key);	
+				$rs = FileReader::getRankingsAtEvent($event->key);
+
+				if ($ms == false && count($pastEvents))
+				{
+					foreach ($pastEvents as $event)
+					{			
+						Downloader::getMatchesForTeam($team->team_number, $event->key);
+						header('Refresh:0');
+						exit();
+					}
+				}		
+
+				if ($as == false && count($pastEvents))
+				{
+					foreach ($pastEvents as $event)
+					{			
+						Downloader::getAwardsForTeam($team->team_number, $event->key);
+						header('Refresh:0');
+						exit();
+					}
+				}
+
+				if ($ss == false && count($pastEvents))
+				{
+					foreach ($pastEvents as $event)
+					{			
+						Downloader::getStatsAtEvent($team->team_number, $event->key);
+						header('Refresh:0');
+						exit();
+					}
+				}
+
+				if ($rs == false && count($pastEvents))
+				{
+					foreach ($pastEvents as $event)
+					{			
+						Downloader::getStatsAtEvent($team->team_number, $event->key);
+						header('Refresh:0');
+						exit();
+					}
+				}
+
 				foreach ($ms as $m) 
 				{
 					$m->match_type = $types[$m->comp_level];
@@ -74,36 +115,6 @@ $app->group('/team', function() {
 			else
 			{
 				array_push($futureEvents, $event);
-			}
-		}
-
-		if (!$matches && count($pastEvents))
-		{
-			foreach ($pastEvents as $event)
-			{			
-				Downloader::getMatchesForTeam($team->team_number, $event->key);
-				header('Refresh:0');
-				exit();
-			}
-		}		
-
-		if ($awards == false && count($pastEvents))
-		{
-			foreach ($pastEvents as $event)
-			{			
-				Downloader::getAwardsForTeam($team->team_number, $event->key);
-				header('Refresh:0');
-				exit();
-			}
-		}
-
-		if ($stats == false && count($pastEvents))
-		{
-			foreach ($pastEvents as $event)
-			{			
-				Downloader::getStatsAtEvent($team->team_number, $event->key);
-				header('Refresh:0');
-				exit();
 			}
 		}
 
