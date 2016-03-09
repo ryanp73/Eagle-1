@@ -79,15 +79,32 @@
 			</thead>
 			<tbody>
 				<tr>
-					<td>{{ rankings[0] }}</td>
-					<td><a href="/team/{{ rankings[1] }}">{{ rankings[1] }}</a></td>
-					<td>{{ rankings[2] }}</td>
-					<td>{{ rankings[3] }}</td>
-					<td>{{ rankings[4] }}</td>
-					<td>{{ rankings[5] }}</td>
-					<td>{{ rankings[6] }}</td>
-					<td>{{ rankings[7] }}</td>
-					<td>{{ rankings[8] }}</td>
+					<td>{{ rankings[0][0] }}</td>
+					<td><a href="/team/{{ rankings[0][1] }}">{{ rankings[0][1] }}</a></td>
+					<td>{{ rankings[0][2] }}</td>
+					<td>{{ rankings[0][3] }}</td>
+					<td>{{ rankings[0][4] }}</td>
+					<td>{{ rankings[0][5] }}</td>
+					<td>{{ rankings[0][6] }}</td>
+					<td>{{ rankings[0][7] }}</td>
+					<td>{{ rankings[0][8] }}</td>
+				</tr>
+			</tbody>
+		</table>
+		<h3>Stats</h3>
+		<table class="table">
+			<thead>
+				<th id="team-number">Team Number</th>
+				<th id="opr">OPR</th>
+				<th id="dpr">DPR</th>
+				<th id="ccwm">CCWM</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{ team.team_number }}</td>
+					<td>{{ stats[0].opr }}</td>
+					<td>{{ stats[0].dpr }}</td>
+					<td>{{ stats[0].ccwm }}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -113,26 +130,75 @@
 		</table>
 	</div>
 	{% for event in pastEvents[1:] %}
-		<div class="tab-pane tab-responsive" id="{{ event.name }}">
-			<table class="table">
-				<thead>
-					<th id="match-type">Match Type</th>
-					<th id="match-number">Match Number</th>
-					<th id="match-rt1">Red Team 1</th>
-					<th id="match-rt2">Red Team 2</th>
-					<th id="match-rt3">Red Team 3</th>
-					<th id="match-rs">Red Score</th>
-					<th id="match-bt1">Blue Team 1</th>
-					<th id="match-bt2">Blue Team 2</th>
-					<th id="match-bt3">Blue Team 3</th>
-					<th id="match-bs">Blue Score</th>
-				</thead>
-				<tbody>
-					{% for match in matches[1:] %}
-						{% include 'partials/simple_match.html' %}
-					{% endfor %}
-				</tbody>
-			</table>
+	<div class="tab-pane tab-responsive" id="{{ event.name }}">
+		<h3>Awards</h3>
+		{% for award in awards[loop.index0] %}
+			<div>{{ award.name }}</div>
+		{% endfor %}
+		<h3>Rankings</h3>
+		<table class="table" id="trankings">
+			<thead>
+				<th id="rank-rank">Ranking</th>
+				<th id="rank-team">Team Number</th>
+				<th id="rank-rp">Ranking Points</th>
+				<th id="rank-auto">Auto Points</th>
+				<th id="rank-sc">Scale/Challenge Points</th>
+				<th id="rank-goals">Goals Points</th>
+				<th id="rank-defense">Defense Points</th>
+				<th id="rank-record">Record</th>
+				<th id="rank-played">Matches Played</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{ rankings[loop.index0][0] }}</td>
+					<td><a href="/team/{{ rankings[loop.index0][1] }}">{{ rankings[loop.index0][1] }}</a></td>
+					<td>{{ rankings[loop.index0][2] }}</td>
+					<td>{{ rankings[loop.index0][3] }}</td>
+					<td>{{ rankings[loop.index0][4] }}</td>
+					<td>{{ rankings[loop.index0][5] }}</td>
+					<td>{{ rankings[loop.index0][6] }}</td>
+					<td>{{ rankings[loop.index0][7] }}</td>
+					<td>{{ rankings[loop.index0][8] }}</td>
+				</tr>
+			</tbody>
+		</table>
+		<h3>Stats</h3>
+		<table class="table">
+			<thead>
+				<th id="team-number">Team Number</th>
+				<th id="opr">OPR</th>
+				<th id="dpr">DPR</th>
+				<th id="ccwm">CCWM</th>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{ team.team_number }}</td>
+					<td>{{ stats[loop.index0].opr }}</td>
+					<td>{{ stats[loop.index0].dpr }}</td>
+					<td>{{ stats[loop.index0].ccwm }}</td>
+				</tr>
+			</tbody>
+		</table>
+		<h3>Matches</h3>
+		<table class="table">
+			<thead>
+				<th id="match-type">Match Type</th>
+				<th id="match-number">Match Number</th>
+				<th id="match-rt1">Red Team 1</th>
+				<th id="match-rt2">Red Team 2</th>
+				<th id="match-rt3">Red Team 3</th>
+				<th id="match-rs">Red Score</th>
+				<th id="match-bt1">Blue Team 1</th>
+				<th id="match-bt2">Blue Team 2</th>
+				<th id="match-bt3">Blue Team 3</th>
+				<th id="match-bs">Blue Score</th>
+			</thead>
+			<tbody>
+				{% for match in matches[loop.index0] %}
+					{% include 'partials/simple_match.html' %}
+				{% endfor %}
+			</tbody>
+		</table>
 		</div>
 	{% endfor %}
 </div>

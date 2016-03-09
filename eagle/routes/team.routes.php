@@ -40,20 +40,36 @@ $app->group('/team', function() {
 
 		$matches = array();
 		$awards = array();
+		$stats = array();
+		$rankings = array();
 
 		foreach ($events as $event)
 		{
-			if (Utils::isAfterNow($event->start_date))
+			if (Utils::isAfterNow($event->end_date))
 			{
 				array_push($pastEvents, $event);
 				$ms = FileReader::getMatchesForTeam($team->team_number, $event->key);
 				$as = FileReader::getAwardsForTeam($team->team_number, $event->key);
+				$ss = FileReader::getStatsAtEvent($event->key);	
+				$rs = FileReader::getRankingsAtEvent($event->key);	
 				foreach ($ms as $m) 
 				{
 					$m->match_type = $types[$m->comp_level];
 				}
+				foreach ($rs as $ranking) 
+				{
+					if ($ranking[1] == $team->team_number) 
+					{
+						array_push($rankings, $ranking);
+						break;		
+					}
+				}
+				$s['opr'] = $ss->oprs->{$team->team_number};
+				$s['dpr'] = $ss->dprs->{$team->team_number};
+				$s['ccwm'] = $ss->ccwms->{$team->team_number};
 				array_push($matches, $ms);
 				array_push($awards, $as);
+				array_push($stats, $s);
 			}
 			else
 			{
@@ -61,31 +77,33 @@ $app->group('/team', function() {
 			}
 		}
 
-		if (!$matches[0] && count($pastEvents))
+		if (!$matches && count($pastEvents))
 		{
 			foreach ($pastEvents as $event)
 			{			
 				Downloader::getMatchesForTeam($team->team_number, $event->key);
 				header('Refresh:0');
+				exit();
 			}
 		}		
 
-		if ($awards[0] == false && count($pastEvents))
+		if ($awards == false && count($pastEvents))
 		{
 			foreach ($pastEvents as $event)
 			{			
 				Downloader::getAwardsForTeam($team->team_number, $event->key);
 				header('Refresh:0');
+				exit();
 			}
 		}
 
-		$rankings = FileReader::getRankingsAtEvent($event->key);
-
-		foreach ($rankings as $ranking)
+		if ($stats == false && count($pastEvents))
 		{
-			if ($ranking[1] == $args['team'])
-			{
-				$rankings = $ranking;
+			foreach ($pastEvents as $event)
+			{			
+				Downloader::getStatsAtEvent($team->team_number, $event->key);
+				header('Refresh:0');
+				exit();
 			}
 		}
 
@@ -115,6 +133,7 @@ $app->group('/team', function() {
 			'events' => $futureEvents,
 			'pastEvents' => $pastEvents,
 			'matches' => $matches,
+			'stats' => $stats,
 			'awards' => $awards,
 			'rankings' => $rankings,
 			'numComments' => Comment::where('team_id', $team->team_number)->count(),

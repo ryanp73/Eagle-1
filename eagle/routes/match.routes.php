@@ -4,6 +4,7 @@ require_once './eagle/utils/Downloader.php';
 require_once './eagle/utils/FileReader.php';
 require_once './eagle/utils/Auth.php';
 require_once './eagle/utils/Utils.php';
+require_once './eagle/models/MatchScouting.php';
 
 $app->group('/match', function() {
 
@@ -33,6 +34,8 @@ $app->group('/match', function() {
 			}
 		}
 
+		$ms = MatchScouting::where('match_id', $args['match'])->all();
+
 		$types = array('f' => 'Finals', 'sf' => 'Semifinals', 'qf' => 'Quarter Final', 'qm' => 'Qualifier');
 
 		$match->type = $types[$match->comp_level];
@@ -42,6 +45,7 @@ $app->group('/match', function() {
 			'title' => $match->name,
 			'event' => $event,
 			'match' => $match,
+			'matchScouting' => $ms,
 			'user'  => Auth::getLoggedInUser()
 		]);
 	});
