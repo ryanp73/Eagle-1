@@ -2,11 +2,11 @@
 	<td>{{ match.match_type }} {% if match.comp_level != 'qm' %}{{ match.set_number }}{% endif %}</td>
 	<td class="{% if match.alliances.red.score > match.alliances.blue.score %} danger {% elseif match.alliances.red.score < match.alliances.blue.score %} info {% endif %}"><a href="/match/{{ match.key }}">{{ match.match_number }}</a></td>
 	{% for team in match.alliances.red.teams %}
-	<td class="danger"><a href="/team/{{ team[3:] }}">{{ team[3:] }}</a></td>
+	<td class="danger team"><a href="/team/{{ team[3:] }}">{{ team[3:] }}</a></td>
 	{% endfor %}
-	<td class="danger">{{ match.alliances.red.score }}</td>
+	<td class="danger score">{{ match.alliances.red.score }}</td>
 	{% for team in match.alliances.blue.teams %}
-	<td class="info"><a href="/team/{{ team[3:] }}">{{ team[3:] }}</a></td>
+	<td class="info team"><a href="/team/{{ team[3:] }}">{{ team[3:] }}</a></td>
 	{% endfor %}
-	<td class="info">{{ match.alliances.blue.score }}</td>
+	<td class="info score">{{ match.alliances.blue.score }}</td>
 </tr>

@@ -5,4 +5,18 @@
 
 {% include 'partials/advanced_match.html' %}
 
+<ul class="nav nav-tabs" role="tablist">
+{% for m in matchScouting %}
+	<li class="{% if loop.index0 == 0 %}active{% endif %}"><a href="#{{ m.team_id }}" data-toggle="tab">{{ m.team_id }}</a></li>
+{% endfor %}
+</ul>
+
+<div class="tab-content">
+	{% for m in matchScouting %}
+	<div class="tab-pane table-responsive {% if loop.index0 == 0 %}active{% endif %}" id="{{ m.team_id }}">
+		{% include 'partials/match_scouting.html' %}
+	</div>
+	{% endfor %}
+</div>
+
 {% include 'partials/footer.html' %}

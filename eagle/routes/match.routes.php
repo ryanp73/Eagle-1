@@ -5,6 +5,7 @@ require_once './eagle/utils/FileReader.php';
 require_once './eagle/utils/Auth.php';
 require_once './eagle/utils/Utils.php';
 require_once './eagle/models/MatchScouting.php';
+require_once './eagle/models/Comment.php';
 
 $app->group('/match', function() {
 
@@ -34,7 +35,12 @@ $app->group('/match', function() {
 			}
 		}
 
-		$ms = MatchScouting::where('match_id', $args['match'])->all();
+		$ms = MatchScouting::where('match_id', $args['match'])->get()->toArray();
+
+		for ($i = 0; $i < count($ms); $i++) 
+		{	
+			$ms[$i]['notes'] = Comment::where('id', (int)$ms[$i]['notes_id'])->first()->toArray();
+		}
 
 		$types = array('f' => 'Finals', 'sf' => 'Semifinals', 'qf' => 'Quarter Final', 'qm' => 'Qualifier');
 
