@@ -76,6 +76,13 @@ $app->group('/scouting', function()  use ($app) {
 		$pit->defenses_id = $defense->id;
 		$pit->notes_id = $comment->id;
 		$pit->save();
+
+		if (isset($_FILES['image']))
+		{
+			$ext = end(explode($_FILES['image']['tmp_name'], '.'));
+			move_uploaded_file($_FILES['image']['tmp_name'], './img/' . $_POST['team_id'] . '.' . $ext);
+		}
+
 		header('Location:/team/' . $_POST['team_id'], '/');
 		exit();
 	});

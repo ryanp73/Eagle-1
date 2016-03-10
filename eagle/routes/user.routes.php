@@ -15,9 +15,10 @@ $app->group('/user', function() {
 	$this->get('/{id}/delete', function($req, $res, $args) {
 		Auth::redirectIfNotLoggedIn();
 		$user = Auth::getLoggedInUser();
-		if ($user->rank >= 9)
+		$userToDelete = User::where('id', $args['id'])->first();
+		if ($user->rank > 9)
 		{
-			User::delete($args['id']);
+			$userToDelete->delete();
 			header('Location:/directory');
 			exit();
 		}
