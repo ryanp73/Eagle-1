@@ -42,6 +42,7 @@ $app->group('/event', function() {
 	$this->get('/{event:\d{4}[A-Za-z]{2,5}\d?}', function($req, $res, $args) {
 		Auth::redirectIfNotLoggedIn();
 
+
 		$event = FileReader::getEvent($args['event']);
 		if (!$event)
 		{
@@ -58,18 +59,10 @@ $app->group('/event', function() {
 			header('Refresh:0');
 			exit();
 		}
-
-	    if (Utils::isAfterNow($event->start_date)) 
+		// This method name doesn't actually make sense, but whatever
+	    if (Utils::isAfterNow(strtotime($event->start_date))) 
 	    {
-
-	        $matches = FileReader::getMatchesAtEvent($args['event']);
-
-	        if (!count($matches))
-	        {
-					Downloader::getMatchesAtEvent($args['event']);
-	                header('Refresh:0');
-	                exit();
-	        }
+	    	$matches = FileReader::getMatchesAtEvent($args['event'], Utils::isEventOccuring($event));
 
 	        $types = array('f' => 'Finals', 'sf' => 'Semifinals', 'qf' => 'Quarter Final', 'qm' => 'Qualifier');
 
@@ -78,42 +71,52 @@ $app->group('/event', function() {
 				$match->match_type = $types[$match->comp_level];
 	        }
 
-	        $rankings = FileReader::getRankingsAtEvent($args['event']);
+	        $rankings = FileReader::getRankingsAtEvent($args['event'], Utils::isEventOccuring($event));
 
-	        if (!count($rankings))
-	        {
-				Downloader::getRankingsAtEvent($args['event']);
-				header('Refresh:0');
-				exit();
-	        }
-
-	        $dlstats = FileReader::getStatsAtEvent($args['event']);
-
-	        if (!$dlstats && !count($dlstats))
-	        {
-	            Downloader::getStatsAtEvent($args['event']);
-	            header('Refresh:0');
-	            exit();
-	        }
+	        $dlstats = FileReader::getStatsAtEvent($args['event'], Utils::isEventOccuring($event));
 
 	        $stats = array();
 
-	        for ($i = 0; $i < count((array)$dlstats->oprs); $i++)
-	        {
-				$tempTeam = array_keys((array)$dlstats->oprs)[$i];
-				$opr = $dlstats->oprs->{$tempTeam};
-				$dpr = $dlstats->dprs->{$tempTeam};
-				$ccwm = $dlstats->ccwms->{$tempTeam};
-				$stats[$tempTeam] = array('number' => $tempTeam, 'opr' => $opr, 'dpr' => $dpr, 'ccwm' => $ccwm);
-            }
+            $awards = FileReader::getAwardsAtEvent($event->key, Utils::isEventOccuring($event));
 
-            $awards = FileReader::getAwardsAtEvent($event->key);
-
-	        if (!count($awards))
+	        if (!Utils::isEventOccuring($event))
 	        {
-				Downloader::getAwardsAtEvent($args['event']);
-				header('Refresh:0');
-				exit();
+	        	if (!$matches)
+		        {
+					Downloader::getMatchesAtEvent($args['event']);
+	                header('Refresh:0');
+	                exit();
+		        }
+
+    	        if (!$dlstats)
+		        {
+		            Downloader::getStatsAtEvent($args['event']);
+		            header('Refresh:0');
+		            exit();
+		        }
+
+		        for ($i = 0; $i < count((array)$dlstats->oprs); $i++)
+		        {
+					$tempTeam = array_keys((array)$dlstats->oprs)[$i];
+					$opr = $dlstats->oprs->{$tempTeam};
+					$dpr = $dlstats->dprs->{$tempTeam};
+					$ccwm = $dlstats->ccwms->{$tempTeam};
+					$stats[$tempTeam] = array('number' => $tempTeam, 'opr' => $opr, 'dpr' => $dpr, 'ccwm' => $ccwm);
+	            }
+
+		        if (!$rankings)
+		        {
+					Downloader::getRankingsAtEvent($args['event']);
+					header('Refresh:0');
+					exit();
+		        }
+
+				if (!$awards)
+		        {
+					Downloader::getAwardsAtEvent($args['event']);
+					header('Refresh:0');
+					exit();
+		        }
 	        }
         }
         else

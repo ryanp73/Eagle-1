@@ -7,6 +7,7 @@ require_once './eagle/utils/Utils.php';
 require_once './eagle/models/Comment.php';
 require_once './eagle/models/Defense.php';
 require_once './eagle/models/PitScouting.php';
+require_once './eagle/models/MatchScouting.php';
 
 $app->group('/team', function() {
 
@@ -118,6 +119,24 @@ $app->group('/team', function() {
 			}
 		}
 
+		$matchScoutings = MatchScouting::where('team_id', $team->team_number)->get()->toArray();
+
+		if ($matchScoutings)
+		{
+			$matchScouting = new MatchScouting();
+
+			$matchScouting->driver_skill = Utils::averageArray(array_map(function($a) {return $a['driver_skill'];}, $matchScoutings));
+			$matchScouting->robot_speed = Utils::averageArray(array_map(function($a) {return $a['robot_speed'];}, $matchScoutings));
+			$matchScouting->manueverability = Utils::averageArray(array_map(function($a) {return $a['manueverability'];}, $matchScoutings));
+			$matchScouting->penalties = Utils::averageArray(array_map(function($a) {return $a['penalties'];}, $matchScoutings));
+			$matchScouting->helpfulness = Utils::averageArray(array_map(function($a) {return $a['helpfulness'];}, $matchScoutings));
+			$matchScouting->work_well_with_us = Utils::averageArray(array_map(function($a) {return $a['work_well_with_us'];}, $matchScoutings));
+		}
+		else
+		{
+			$matchScouting = false;
+		}
+
 		$comments = Comment::where('team_id', $team->team_number);
 
 		$defense = Defense::where('team_id', $args['team'])->orderBy('id', 'desc')->first();
@@ -147,6 +166,7 @@ $app->group('/team', function() {
 			'stats' => $stats,
 			'awards' => $awards,
 			'rankings' => $rankings,
+			'ms' => $matchScouting,
 			'numComments' => Comment::where('team_id', $team->team_number)->count(),
 			'comment' => Comment::where('team_id', $team->team_number)->first(),
 			'defenseExists' => $defense,

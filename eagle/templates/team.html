@@ -5,35 +5,7 @@
 <h3>{{ team.location }}</h3>
 <p><a target="_blank" href="https://thebluealliance.com/team/{{ team.team_number }}">See more on The Blue Alliance</a></p>
 
-{% if pitScoutingData != false %}
-{% include 'partials/pit_scouting_partial.html' %}
-{% else %}
-<table class="table table-striped" id="scouting">
-{% endif %}
-
-{% if defenseExists != false %}
-{% include 'partials/defense_partial.html' %}
-{% else %}
-</table>
-{% endif %}
-
-{% if numComments >= 1 %}
-<h3>Comments</h3>
-<div class="panel panel-default">
-	<div class="panel-body">
-		{{ comment.notes }}
-	</div>
-	<div class="panel-heading">
-		{{ comment.author }}
-	</div>
-</div>
-{% endif %}
-
-{% if numComments %}
-<a href="/comment/{{ team.team_number }}">See the remaining {{ numComments - 1 }} comments.</a>
-{% endif %}
-
-<h4>Events</h4>
+<h3>Events</h3>
 
 <ul id="events">
 {% for event in events %}
@@ -49,6 +21,48 @@
 	</li>
 {% endfor %}
 </ul>
+
+<h3>Scouting Data</h3>
+<ul class="nav nav-tabs" role="tablist">
+	<li class="active"><a href="#defenses" data-toggle="tab">Defenses</a></li>
+	<li><a href="#pitScouting" data-toggle="tab">Pit Scouting</a></li>
+	<li><a href="#matchScouting" data-toggle="tab">Match Scouting</a></li>
+	<li><a href="#comments" data-toggle="tab">Comments</a></li>
+</ul>
+
+<div class="tab-content">
+	<div class="tab-pane table-responsive active" id="defenses">
+		{% if defenses != false %}
+		{% include 'partials/defense_partial.html' %}
+		{% endif %}
+	</div>
+	<div class="tab-pane table-responsive" id="pitScouting">
+		{% if pitScoutingData != false %}
+		{% include 'partials/pit_scouting_partial.html' %}
+		{% endif %}
+	</div>
+	<div class="tab-pane table-responsive" id="matchScouting">
+		{% if ms != false %}
+		{% include 'partials/match_scouting_data.html' %}
+		{% endif %}
+	</div>
+	<div class="tab-pane table-responsive" id="comments">
+		{% if numComments >= 1 %}
+		<h3>Comments</h3>
+		<div class="panel panel-default">
+			<div class="panel-body">
+				{{ comment.notes }}
+			</div>
+			<div class="panel-heading">
+				{{ comment.author }}
+			</div>
+		</div>
+		{% endif %}
+		{% if numComments %}
+		<a href="/comment/{{ team.team_number }}">See the remaining {{ numComments - 1 }} comments.</a>
+		{% endif %}
+	</div>
+</div>
 
 {% if pastEvents %}
 <ul class="nav nav-tabs" role="tablist">
@@ -169,7 +183,8 @@
 	}
 
 	getAverageScore();
-	defenseRatingText('#scouting');
+	defenseRatingText('#psScouting');
+	defenseRatingText('#dScouting');
 	sortEvents();
 	$('#match-type').on('click touchstart', function(e) {sort(e,0,true)});
 	$('#match-number').on('click touchstart', function(e) {sort(e,1,true)});

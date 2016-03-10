@@ -63,7 +63,7 @@ class Utils
 
 	public static function addADay($date)
 	{
-		return strtotime($date) + 86400;
+		return date('Y-m-d', strtotime($date) + 86400);
 	}
 
 }
