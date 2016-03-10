@@ -118,7 +118,6 @@ $app->group('/team', function() {
 				array_push($futureEvents, $event);
 			}
 		}
-
 		$matchScoutings = MatchScouting::where('team_id', $team->team_number)->get()->toArray();
 
 		if ($matchScoutings)
@@ -160,7 +159,7 @@ $app->group('/team', function() {
 		return $this->view->render($res, 'team.html', [
 			'title'  => 'Team ' . $team->team_number,
 			'team'   => $team,
-			'events' => $futureEvents,
+                        'events' => $futureEvents,
 			'pastEvents' => $pastEvents,
 			'matches' => $matches,
 			'stats' => $stats,

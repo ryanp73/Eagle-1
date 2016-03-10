@@ -79,8 +79,7 @@ $app->group('/scouting', function()  use ($app) {
 
 		if (isset($_FILES['image']))
 		{
-			$ext = end(explode($_FILES['image']['tmp_name'], '.'));
-			move_uploaded_file($_FILES['image']['tmp_name'], './img/' . $_POST['team_id'] . '.' . $ext);
+			move_uploaded_file($_FILES['image']['tmp_name'], './img/' . $_POST['team_id']);
 		}
 
 		header('Location:/team/' . $_POST['team_id'], '/');
