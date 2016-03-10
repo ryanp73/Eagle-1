@@ -18,6 +18,7 @@ $app->get('/failure', function($req, $res, $args) {
 });
 
 $app->get('/directory', function($req, $res, $args) {
+	Auth::redirectIfNotLoggedIn();
 	$this->view->render($res, 'directory.html', [
 		'title' => 'User Directory',
 		'loggedIn' => Auth::checkLoggedIn(),
@@ -43,8 +44,8 @@ $app->get('/logout', function($req, $res, $args) {
 });
 
 $app->get('/register', function($req, $res, $args) {
-	Auth::redirectIfNotLoggedIn();
-	$this->view->render($res, 'register.html', [
+/*	Auth::redirectIfNotLoggedIn();
+*/	$this->view->render($res, 'register.html', [
 		'title' => 'Register User',
 		'loggedIn' => Auth::checkLoggedIn(),
 		'user' => Auth::getLoggedInUser()
