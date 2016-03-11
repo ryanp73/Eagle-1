@@ -27,7 +27,7 @@ class Utils
 		{
 			if (!file_exists('./img/' . $team->team_number))
 			{
-				array_push($teams, $team)				
+				array_push($teams, $team);			
 			}
 		}
 		return $teams;
