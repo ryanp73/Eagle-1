@@ -2,7 +2,7 @@
 
 <h2>Match Scouting</h2>
 
-<form action="/scouting/match/new" method="POST" role="form">
+<form action="" method="POST" role="form">
 	
 	{% if id %}
 		<input required type="hidden" name="match_id" value="{{ id }}">
@@ -12,11 +12,17 @@
 			<input required class="form-control" type="text" name="match_id" id="match_id">
 		</div>	
 	{% endif %}
-
+	{% if teamId %}
+		<input required type="hidden" name="team_id" value="{{ teamId }}">
+	{% else %}
 	<div class="form-group">
-			<label for="team_id">Team Number</label>
-			<input required class="form-control" type="text" name="team_id" id="team_id">
-		</div>	
+		<label for="team_id">Team Number</label>
+		<input required class="form-control" type="text" name="team_id" id="team_id">
+	</div>
+	{% endif %}
+
+	<h4>Check if defenses are the same:</h4>
+	{% include 'partials/checkDefenses.html' %}
 
 	<div class="form-group">
 		<label for="driver_skill">Driver Skill</label>

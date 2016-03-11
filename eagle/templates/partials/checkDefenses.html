@@ -1,0 +1,56 @@
+<div class="form-group">
+	<label for="low_bar">Low Bar</label>
+	<select name="low_bar" id="low_bar">
+		<option value="0" {% if defenses.low_bar == 0 %}selected{% endif %}>Can't do.</option>
+		<option value="1" {% if defenses.low_bar == 1 %}selected{% endif %}>Able, but inconsistent</option>
+		<option value="2" {% if defenses.low_bar == 2 %}selected{% endif %}>Consistent</option>
+	</select><br>
+	<label for="portcullis">Portcullis</label>
+	<select name="portcullis" id="portcullis">
+		<option value="0" {% if defenses.portcullis == 0 %}selected{% endif %}>Can't do.</option>
+		<option value="1" {% if defenses.portcullis == 1 %}selected{% endif %}>Able, but inconsistent</option>
+		<option value="2" {% if defenses.portcullis == 2 %}selected{% endif %}>Consistent</option>
+	</select><br>
+	<label for="cheval_de_frise">Cheval de Frise</label>
+	<select name="cheval_de_frise" id="cheval_de_frise">
+		<option value="0" {% if defenses.cheval_de_frise == 0 %}selected{% endif %}>Can't do.</option>
+		<option value="1" {% if defenses.cheval_de_frise == 1 %}selected{% endif %}>Able, but inconsistent</option>
+		<option value="2" {% if defenses.cheval_de_frise == 2 %}selected{% endif %}>Consistent</option>
+	</select><br>
+	<label for="moat">Moat</label>
+	<select name="moat" id="moat">
+		<option value="0" {% if defenses.moat == 0 %}selected{% endif %}>Can't do.</option>
+		<option value="1" {% if defenses.moat == 1 %}selected{% endif %}>Able, but inconsistent</option>
+		<option value="2" {% if defenses.moat == 2 %}selected{% endif %}>Consistent</option>
+	</select><br>
+	<label for="ramparts">Ramparts</label>
+	<select name="ramparts" id="ramparts">
+		<option value="0" {% if defenses.ramparts == 0 %}selected{% endif %}>Can't do.</option>
+		<option value="1" {% if defenses.ramparts == 1 %}selected{% endif %}>Able, but inconsistent</option>
+		<option value="2" {% if defenses.ramparts == 2 %}selected{% endif %}>Consistent</option>
+	</select><br>
+	<label for="drawbridge">Drawbridge</label>
+	<select name="drawbridge" id="drawbridge">
+		<option value="0" {% if defenses.drawbridge == 0 %}selected{% endif %}>Can't do.</option>
+		<option value="1" {% if defenses.drawbridge == 1 %}selected{% endif %}>Able, but inconsistent</option>
+		<option value="2" {% if defenses.drawbridge == 2 %}selected{% endif %}>Consistent</option>
+	</select><br>
+	<label for="sally_port">Sally Port</label>
+	<select name="sally_port" id="sally_port">
+		<option value="0" {% if defenses.sally_port == 0 %}selected{% endif %}>Can't do.</option>
+		<option value="1" {% if defenses.sally_port == 1 %}selected{% endif %}>Able, but inconsistent</option>
+		<option value="2" {% if defenses.sally_port == 2 %}selected{% endif %}>Consistent</option>
+	</select><br>
+	<label for="rock_wall">Rock Wall</label>
+	<select name="rock_wall" id="rock_wall">
+		<option value="0" {% if defenses.rock_wall == 0 %}selected{% endif %}>Can't do.</option>
+		<option value="1" {% if defenses.rock_wall == 1 %}selected{% endif %}>Able, but inconsistent</option>
+		<option value="2" {% if defenses.rock_wall == 2 %}selected{% endif %}>Consistent</option>
+	</select><br>
+	<label for="rough_terrain">Rough Terrain</label>
+	<select name="rough_terrain" id="rough_terrain">
+		<option value="0" {% if defenses.rough_terrain == 0 %}selected{% endif %}>Can't do.</option>
+		<option value="1" {% if defenses.rough_terrain == 1 %}selected{% endif %}>Able, but inconsistent</option>
+		<option value="2" {% if defenses.rough_terrain == 2 %}selected{% endif %}>Consistent</option>
+	</select><br>
+</div>

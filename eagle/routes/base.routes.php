@@ -7,8 +7,8 @@ require_once './eagle/models/User.php';
 require_once './eagle/models/PitScouting.php';
 
 $app->get('/', function($req, $res, $args) {
-	$needPitScouting = count(Utils::getUnscoutedTeams()) >= 1;
-	$needImages = count(Utils::getImagelessTeams()) >= 1;
+	$needPitScouting = count(Utils::getUnscoutedTeams(Utils::getCurrentEvent())) >= 1;
+	$needImages = count(Utils::getImagelessTeams(Utils::getCurrentEvent())) >= 1;
 
 	$this->view->render($res, 'home.html', [
 		'title' => 'Eagle Home',

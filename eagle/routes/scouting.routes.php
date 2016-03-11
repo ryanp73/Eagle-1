@@ -122,9 +122,12 @@ $app->group('/scouting', function()  use ($app) {
 		]);
 	});
 
-	$this->get('/match/new/{id:20\d{2}[a-z]{3,5}_[a-z]{1,2}\d?m\d{1,3}}', function($req, $res, $args) {		
+	$this->get('/match/new/{id:20\d{2}[a-z]{3,5}_[a-z]{1,2}\d?m\d{1,3}}/{team:\d{1,4}}', function($req, $res, $args) {		
+		$defenses = Defense::where('team_id', $args['team'])->first();
 		$this->view->render($res, 'matchScouting.html', [
 			'title' => 'New Match Scouting',
+			'defenses' => $defenses,
+			'teamId' => $args['team'],
 			'user' => Auth::getLoggedInUser(),
 			'id' => $args['id']
 		]);
@@ -237,12 +240,23 @@ $app->group('/scouting', function()  use ($app) {
 		if ($_POST['matchType'] != 'q') $str .= '1';
 		$str .= 'm';
 		$str .= $_POST['matchNumber'];
-		$event = split('_', $str)[0];
-		Downloader::getMatchesAtEvent($event);
+		$str .= '/' . $_POST['teamNumber'];
 		return $res->withStatus(302)->withHeader('Location', '/scouting/match/new/' . $str);
 	});
 
-	$this->post('/match/new', function($req, $res, $args) {
+	$this->post('/match/new/{id:20\d{2}[a-z]{3,5}_[a-z]{1,2}\d?m\d{1,3}}/{team:\d{1,4}}', function($req, $res, $args) {
+		$defense = Defense::where('team_id', $_POST['team_id'])->first();
+		$defense->low_bar = $_POST['low_bar'];
+		$defense->portcullis = $_POST['portcullis'];
+		$defense->cheval_de_frise = $_POST['cheval_de_frise'];
+		$defense->moat = $_POST['moat'];
+		$defense->ramparts = $_POST['ramparts'];
+		$defense->sally_port = $_POST['sally_port'];
+		$defense->drawbridge = $_POST['drawbridge'];
+		$defense->rock_wall = $_POST['rock_wall'];
+		$defense->rough_terrain = $_POST['rough_terrain'];
+		$defense->save();
+
 		$comment = new Comment();
 		$comment->user_id = Auth::getLoggedInUser()->id;
 		$comment->author = Auth::getLoggedInUser()->name;
