@@ -1,0 +1,11 @@
+{% include 'partials/header.html' %}
+
+<h3>Teams Without Photos</h3>
+
+<ul>
+	{% for team in teams %}
+	<li><a href="/scouting/images/{{ team.team_number }}">{{ team.team_number }}</a></li>
+	{% endfor %}
+</ul>
+
+{% include 'partials/footer.html' %}

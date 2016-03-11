@@ -1,0 +1,10 @@
+{% include 'partials/header.html' %}
+
+<h3>Submit Photo for {{ team }}</h3>
+
+<form action="" method="POST">
+	<input type="file" name="image" id="image" accept="images/*">
+	<input type="submit" value="Add image!" class="btn btn-primary">
+</form>
+
+{% include 'partials/footer.html' %}

@@ -1,11 +1,19 @@
 <?php
 
 require_once './eagle/utils/Auth.php';
+require_once './eagle/utils/Utils.php';
+require_once './eagle/utils/FileReader.php';
 require_once './eagle/models/User.php';
+require_once './eagle/models/PitScouting.php';
 
 $app->get('/', function($req, $res, $args) {
+	$needPitScouting = count(Utils::getUnscoutedTeams()) >= 1;
+	$needImages = count(Utils::getImagelessTeams()) >= 1;
+
 	$this->view->render($res, 'home.html', [
 		'title' => 'Eagle Home',
+		'needPitScouting' => $needPitScouting,
+		'needImages' => $needImages,
 		'loggedIn' => Auth::checkLoggedIn(),
 		'user'  => Auth::getLoggedInUser()
 	]);

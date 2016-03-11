@@ -130,6 +130,32 @@ $app->group('/scouting', function()  use ($app) {
 		]);
 	});
 
+	$this->get('/images/{team:\d{1,4}}', function($req, $res, $args) {		
+		$this->view->render($res, 'imageSubmit.html', [
+			'title' => 'Image for Team ' . $args['team'],
+			'team' => $args['team'],
+			'user' => Auth::getLoggedInUser()
+		]);
+	});
+
+	$this->post('/images/{team:\d{1,4}}', function($req, $res, $args) {		
+		if (isset($_FILES['image']))
+		{
+			move_uploaded_file($_FILES['image']['tmp_name'], './img/' . $args['team']);
+		}
+		return $res->withStatus(302)->withHeader('Location', '/scouting/images/list');
+	});
+
+	$this->get('/images/list', function($req, $res, $args) {		
+		$teams = Utils::getUnscoutedTeams(Utils::getCurrentEvent());
+
+		$this->view->render($res, 'imagesList.html', [
+			'title' => 'List of Pictures to Take',
+			'teams' => $teams,
+			'user' => Auth::getLoggedInUser()
+		]);
+	});
+
 	$this->get('/ds', function($req, $res, $args) {		
 		$this->view->render($res, 'defenseSelector.html', [
 			'title' => 'Defense Selector',
@@ -155,36 +181,36 @@ $app->group('/scouting', function()  use ($app) {
 		$portcullis = $team1d->portcullis + $team2d->portcullis + $team3d->portcullis;
 		$cheval_de_frise = $team1d->cheval_de_frise + $team2d->cheval_de_frise + $team3d->cheval_de_frise;
 
-		if ($portcullis < $cheval_de_frise) $selections['a'] = 'Portcullis';
-		else if ($portcullis == $cheval_de_frise) $selections['a'] = 'Equal';
-		else $selections['a'] = 'Cheval de Frise';
+		if ($portcullis < $cheval_de_frise) $selections['a'] = ['Portcullis', $portcullis];
+		else if ($portcullis == $cheval_de_frise) $selections['a'] = ['Equal', $portcullis];
+		else $selections['a'] = ['Cheval de Frise', $cheval_de_frise];
 
 		$moat = $team1d->moat + $team2d->moat + $team3d->moat;
 		$ramparts = $team1d->ramparts + $team2d->ramparts + $team3d->ramparts;
 
-		if ($moat < $ramparts) $selections['b'] = 'Moat';
-		else if ($moat == $ramparts) $selections['b'] = 'Equal';
-		else $selections['b'] = 'Ramparts';
+		if ($moat < $ramparts) $selections['b'] = ['Moat', $moat];
+		else if ($moat == $ramparts) $selections['b'] = ['Equal', $moat];
+		else $selections['b'] = ['Ramparts', $ramparts];
 
 		$drawbridge = $team1d->drawbridge + $team2d->drawbridge + $team3d->drawbridge;
 		$sally_port = $team1d->sally_port + $team2d->sally_port + $team3d->sally_port;
 
-		if ($drawbridge < $sally_port) $selections['c'] = 'Drawbridge';
-		else if ($drawbridge == $sally_port) $selections['c'] = 'Equal';
-		else $selections['c'] = 'Sally Port';
+		if ($drawbridge < $sally_port) $selections['c'] = ['Drawbridge', $drawbridge];
+		else if ($drawbridge == $sally_port) $selections['c'] = ['Equal', $drawbridge];
+		else $selections['c'] = ['Sally Port', $sally_port];
 
 		$rock_wall = $team1d->rock_wall + $team2d->rock_wall + $team3d->rock_wall;
 		$rough_terrain = $team1d->rough_terrain + $team2d->rough_terrain + $team3d->rough_terrain;
 
-		if ($rock_wall < $rough_terrain) $selections['d'] = 'Rock Wall';
-		else if ($rock_wall == $rough_terrain) $selections['d'] = 'Equal';
-		else $selections['d'] = 'Rough Terrain';
+		if ($rock_wall < $rough_terrain) $selections['d'] = ['Rock Wall', $rock_wall];
+		else if ($rock_wall == $rough_terrain) $selections['d'] = ['Equal', $rock_wall];
+		else $selections['d'] = ['Rough Terrain', $rough_terrain];
 
 		$low_bar = $team1d->low_bar + $team2d->low_bar + $team3d->low_bar;
 		
-		if ($low_bar < 2) $selections['low'] = 'Inconsistent';
-		else if ($low_bar >= 2 && $low_bar < 4) $selections['low'] = 'Medium';
-		else if ($low_bar >= 4) $selections['low'] = 'Guaranteed';
+		if ($low_bar < 2) $selections['low'] = ['Inconsistent', $low_bar];
+		else if ($low_bar >= 2 && $low_bar < 4) $selections['low'] = ['Probably', $low_bar];
+		else if ($low_bar >= 4) $selections['low'] = ['Guaranteed', $low_bar];
 
 		$this->view->render($res, 'defenseSelections.html', [
 			'title' => 'Defense Selector',

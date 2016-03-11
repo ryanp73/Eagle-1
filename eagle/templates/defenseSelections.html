@@ -4,10 +4,39 @@
 
 <div>{{ team1 }} - {{ team2 }} - {{ team3 }}</div>
 
-<div>Group A {{ selections.a }}</div>
-<div>Group B {{ selections.b }}</div>
-<div>Group C {{ selections.c }}</div>
-<div>Group D {{ selections.d }}</div>
-<div>Low Bar {{ selections.low }}</div>
+<table class="table table-responsive">
+	<thead>
+		<th>Group</th>
+		<th>Selection</th>
+		<th>Score</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Group A</td>
+			<td>{{ selections.a[0] }}</td>
+			<td>{{ selections.a[1] }}</td>
+		</tr>
+		<tr>
+			<td>Group B</td>
+			<td>{{ selections.b[0] }}</td>
+			<td>{{ selections.b[1] }}</td>
+		</tr>
+		<tr>
+			<td>Group C</td>
+			<td>{{ selections.c[0] }}</td>
+			<td>{{ selections.c[1] }}</td>
+		</tr>
+		<tr>
+			<td>Group D</td>
+			<td>{{ selections.d[0] }}</td>
+			<td>{{ selections.d[1] }}</td>
+		</tr>
+		<tr>
+			<td>Low Bar</td>
+			<td>{{ selections.low[0] }}</td>
+			<td>{{ selections.low[1] }}</td>
+		</tr>
+	</tbody>
+</table>
 
 {% include 'partials/footer.html' %}

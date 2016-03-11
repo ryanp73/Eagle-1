@@ -20,6 +20,19 @@ class Utils
 		return $teams;
 	}
 
+	public static function getImagelessTeams($event) 
+	{
+		$teams = array();
+		foreach (FileReader::getTeamsAtEvent($event) as $team) 
+		{
+			if (!file_exists('./img/' . $team->team_number))
+			{
+				array_push($teams, $team)				
+			}
+		}
+		return $teams;
+	}
+
 	public static function getCurrentEvent() 
 	{
 		return (self::isBeforeNow('2016-03-14')) ? '2016mokc' : '2016iacf';

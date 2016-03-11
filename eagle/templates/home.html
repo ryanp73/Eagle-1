@@ -6,9 +6,14 @@
 
 <h3>Welcome {{ user.name }}</h3>
 
-<h4><a href="/scouting/ds">Defenses Generator</a></h4>
+<div class="alert alert-info"><a href="/scouting/ds" class="alert-link">Defenses Generator</a></div>
 
+{% if needImages %}
+<a href="/scouting/images/list">Take Pictures if Needed!</a><br>
+{% endif %}
+{% if needPitScouting %}
 <a href="/scouting/pit">Pit Scouting Home!</a><br>
+{% endif %}
 <a href="/scouting/match">Match Scouting Home!</a><br>
 <a href="/comment/new">Add A Comment!</a><br>
 <br>
