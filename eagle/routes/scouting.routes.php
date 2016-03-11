@@ -150,7 +150,7 @@ $app->group('/scouting', function()  use ($app) {
 	});
 
 	$this->get('/images/list', function($req, $res, $args) {		
-		$teams = Utils::getUnscoutedTeams(Utils::getCurrentEvent());
+		$teams = Utils::getImagelessTeams(Utils::getCurrentEvent());
 
 		$this->view->render($res, 'imagesList.html', [
 			'title' => 'List of Pictures to Take',
