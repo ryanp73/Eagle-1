@@ -130,6 +130,72 @@ $app->group('/scouting', function()  use ($app) {
 		]);
 	});
 
+	$this->get('/ds', function($req, $res, $args) {		
+		$this->view->render($res, 'defenseSelector.html', [
+			'title' => 'Defense Selector',
+			'user' => Auth::getLoggedInUser()
+		]);
+	});
+
+	$this->post('/ds', function($req, $res, $args) {
+		$location = '/scouting/ds';
+		$location .= '/' . $_POST['team1'];		
+		$location .= '/' . $_POST['team2'];		
+		$location .= '/' . $_POST['team3'];		
+		return $res->withStatus(302)->withHeader('Location', $location);
+	});
+
+	$this->get('/ds/{team1:\d{1,4}}/{team2:\d{1,4}}/{team3:\d{1,4}}', function($req, $res, $args) {		
+		$team1d = Defense::where('team_id', $args['team1'])->first();
+		$team2d = Defense::where('team_id', $args['team2'])->first();
+		$team3d = Defense::where('team_id', $args['team3'])->first();
+
+		$selections = array();
+
+		$portcullis = $team1d->portcullis + $team2d->portcullis + $team3d->portcullis;
+		$cheval_de_frise = $team1d->cheval_de_frise + $team2d->cheval_de_frise + $team3d->cheval_de_frise;
+
+		if ($portcullis < $cheval_de_frise) $selections['a'] = 'Portcullis';
+		else if ($portcullis == $cheval_de_frise) $selections['a'] = 'Equal';
+		else $selections['a'] = 'Cheval de Frise';
+
+		$moat = $team1d->moat + $team2d->moat + $team3d->moat;
+		$ramparts = $team1d->ramparts + $team2d->ramparts + $team3d->ramparts;
+
+		if ($moat < $ramparts) $selections['b'] = 'Moat';
+		else if ($moat == $ramparts) $selections['b'] = 'Equal';
+		else $selections['b'] = 'Ramparts';
+
+		$drawbridge = $team1d->drawbridge + $team2d->drawbridge + $team3d->drawbridge;
+		$sally_port = $team1d->sally_port + $team2d->sally_port + $team3d->sally_port;
+
+		if ($drawbridge < $sally_port) $selections['c'] = 'Drawbridge';
+		else if ($drawbridge == $sally_port) $selections['c'] = 'Equal';
+		else $selections['c'] = 'Sally Port';
+
+		$rock_wall = $team1d->rock_wall + $team2d->rock_wall + $team3d->rock_wall;
+		$rough_terrain = $team1d->rough_terrain + $team2d->rough_terrain + $team3d->rough_terrain;
+
+		if ($rock_wall < $rough_terrain) $selections['d'] = 'Rock Wall';
+		else if ($rock_wall == $rough_terrain) $selections['d'] = 'Equal';
+		else $selections['d'] = 'Rough Terrain';
+
+		$low_bar = $team1d->low_bar + $team2d->low_bar + $team3d->low_bar;
+		
+		if ($low_bar < 2) $selections['low'] = 'Inconsistent';
+		else if ($low_bar >= 2 && $low_bar < 4) $selections['low'] = 'Medium';
+		else if ($low_bar >= 4) $selections['low'] = 'Guaranteed';
+
+		$this->view->render($res, 'defenseSelections.html', [
+			'title' => 'Defense Selector',
+			'selections' => $selections,
+			'team1' => $args['team1'],
+			'team2' => $args['team2'],
+			'team3' => $args['team3'],
+			'user' => Auth::getLoggedInUser()
+		]);
+	});
+
 	$this->get('/match', function($req, $res, $args) {
 		$this->view->render($res, 'matchScoutingHome.html', [
 			'title' => 'Match Scouting',

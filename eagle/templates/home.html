@@ -5,10 +5,15 @@
 {% if loggedIn %}
 
 <h3>Welcome {{ user.name }}</h3>
+
+<h4><a href="/scouting/ds">Defenses Generator</a></h4>
+
 <a href="/scouting/pit">Pit Scouting Home!</a><br>
 <a href="/scouting/match">Match Scouting Home!</a><br>
 <a href="/comment/new">Add A Comment!</a><br>
 <br>
+
+
 <form class="form-group">
 	<div class="input-group">
 		<input type="text" autocomplete="off" class="form-control" placeholder="Team" id="teamSearch">
