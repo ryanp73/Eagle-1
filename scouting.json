@@ -1,0 +1,360 @@
+{
+	"match": {
+		"attributes": [
+			{
+				"id": "team",
+				"atype": "integer",
+				"qtype": "numeric",
+				"question": "What is the team number?",
+				"conditional": false,
+				"required": true,
+				"minimum": 1,
+				"maximum": 9999
+			},
+			{
+				"id": "scouterid",
+				"atype": "integer",
+				"qtype": "scouterid"
+			},
+			{
+				"id": "matchkey",
+				"atype": "string",
+				"qtype": "matchkey"
+			},
+			{
+				"id": "auto",
+				"atype": "boolean",
+				"qtype": "radio",
+				"question": "Did the robot run in autonomous?",
+				"conditional": false,
+				"required": true,
+				"choices": [
+					{
+						"text": "Yes",
+						"value": true
+					},
+					{
+						"text": "No",
+						"value": false
+					}
+				]
+			},
+			{
+				"id": "autogear",
+				"atype": "boolean",
+				"qtype": "radio",
+				"question": "Did the robot place a gear in auto?",
+				"conditional": true,
+				"origin": "auto",
+				"originAnswer": true,
+				"required": false,
+				"default": false,
+				"choices": [
+					{
+						"text": "Yes",
+						"value": true
+					},
+					{
+						"text": "No",
+						"value": false
+					}
+				]
+			},
+			{
+				"id": "autogearpos",
+				"atype": "string",
+				"qtype": "radio",
+				"question": "Which peg did they place a gear on (if any)?",
+				"conditional": true,
+				"origin": "autogear",
+				"originAnswer": true,
+				"required": false,
+				"default": "Did not place",
+				"choices": [
+					{
+						"text": "Boiler side peg",
+						"value": "Boiler"
+					},
+					{
+						"text": "Middle peg",
+						"value": "Middle"
+					},
+					{
+						"text": "Feeder station peg",
+						"value": "Feeder"
+					}
+				]
+			},
+			{
+				"id": "autokpa",
+				"atype": "integer",
+				"qtype": "numeric",
+				"question": "How many kPa did they score in auto?",
+				"conditional": true,
+				"origin": "auto",
+				"originAnswer": true,
+				"required": false,
+				"default": 0,
+				"minimum": 0,
+				"maximum": 100
+			},
+			{
+				"id": "autohoppertriggered",
+				"atype": "boolean",
+				"qtype": "radio",
+				"question": "Did the robot trigger the hopper in auto?",
+				"conditional": true,
+				"origin": "auto",
+				"originAnswer": true,
+				"required": false,
+				"default": false,
+				"choices": [
+					{
+						"text": "Yes",
+						"value": true
+					},
+					{
+						"text": "No",
+						"value": false
+					}
+				]
+			},
+			{
+				"id": "autobaseline",
+				"atype": "boolean",
+				"qtype": "radio",
+				"question": "Did the robot end auto beyond the baseline?",
+				"conditional": true,
+				"origin": "auto",
+				"originAnswer": true,
+				"required": false,
+				"default": true,
+				"choices": [
+					{
+						"text": "Yes",
+						"value": true
+					},
+					{
+						"text": "No",
+						"value": false
+					}
+				]
+			},
+			{
+				"id": "teleop",
+				"atype": "boolean",
+				"qtype": "radio",
+				"question": "Did the robot run in teleop?",
+				"conditional": false,
+				"required": true,
+				"default": true,
+				"choices": [
+					{
+						"text": "Yes",
+						"value": true
+					},
+					{
+						"text": "No",
+						"value": false
+					}
+				]
+			},
+			{
+				"id": "telegear",
+				"atype": "integer",
+				"qtype": "numeric",
+				"question": "How many gears did they place in teleop?",
+				"conditional": true,
+				"origin": "teleop",
+				"originAnswer": true,
+				"required": true,
+				"default": 0,
+				"minimum": 0,
+				"maximum": 12
+			},
+			{
+				"id": "telegearlocation",
+				"atype": "string",
+				"qtype": "radio",
+				"question": "Where did the robot collect gears from?",
+				"conditional": true,
+				"origin": "teleop",
+				"originAnswer": true,
+				"required": true,
+				"default": "None",
+				"choices": [
+					{
+						"text": "Feeder station only",
+						"value": "Feeder"
+					},
+					{
+						"text": "Ground pickup only",
+						"value": "Ground"
+					},
+					{
+						"text": "Both ground pickup and feeder station",
+						"value": "Both"
+					},
+					{
+						"text": "Did not get any gears (only preloaded?)",
+						"value": "None"
+					}
+				]
+			},
+			{
+				"id": "telefuel",
+				"atype": "boolean",
+				"qtype": "radio",
+				"question": "Did they shoot any fuel in teleop?",
+				"conditional": true,
+				"origin": "teleop",
+				"originAnswer": true,
+				"required": true,
+				"default": false,
+				"choices": [
+					{
+						"text": "Yes",
+						"value": true
+					},
+					{
+						"text": "No",
+						"value": false
+					}
+				]
+			},
+			{
+				"id": "telekpa",
+				"atype": "integer",
+				"qtype": "numeric",
+				"question": "How many kPa did they score (approximate)?",
+				"conditional": true,
+				"origin": "telefuel",
+				"originAnswer": true,
+				"required": true,
+				"default": 0,
+				"minimum": 0,
+				"maximum": 100
+			},
+			{
+				"id": "telefueltype",
+				"atype": "string",
+				"qtype": "radio",
+				"question": "How did the robot pick up fuel?",
+				"conditional": true,
+				"origin": "telefuel",
+				"originAnswer": true,
+				"required": false,
+				"default": "None",
+				"choices": [
+					{
+						"text": "Hopper only",
+						"value": "Hopper"
+					},
+					{
+						"text": "Ground pickup only",
+						"value": "Ground"
+					},
+					{
+						"text": "Both ground pickup and hopper",
+						"value": "Both"
+					},
+					{
+						"text": "Did not collect fuel",
+						"value": "None"
+					}
+				]
+
+			},
+			{
+				"id": "climb",
+				"atype": "string",
+				"qtype": "radio",
+				"question": "Did the team climb successfully?",
+				"conditional": true,
+				"origin": "teleop",
+				"originAnswer": true,
+				"required": true,
+				"default": "No",
+				"choices": [
+					{
+						"text": "Yes they climbed",
+						"value": "Climbed"
+					},
+					{
+						"text": "Off the ground, but didn't reach touchpad",
+						"value": "Off"
+					},
+					{
+						"text": "Climbed but fell off",
+						"value": "Fell"
+					},
+					{
+						"text": "Did not try to climb",
+						"value": "No try"
+					},
+					{
+						"text": "Tried, but did not get off the ground",
+						"value": "No"
+					}
+				]
+			},
+			{
+				"id": "climbTime",
+				"atype": "string",
+				"qtype": "radio",
+				"question": "How long did they take to climb? (approx. including line up)",
+				"conditional": true,
+				"origin": "climb",
+				"originAnswer": "Climbed",
+				"required": true,
+				"default": "N/A",
+				"choices": [
+					{
+						"text": "Really fast (1-2 seconds)",
+						"value": "1-2"
+					},
+					{
+						"text": "About our speed (3-5 seconds)",
+						"value": "3-5"
+					},
+					{
+						"text": "Slightly slower (6-10 seconds)",
+						"value": "6-10"
+					},
+					{
+						"text": "Fairly slow climb (11-20 seconds)",
+						"value": "11-20"
+					},
+					{
+						"text": "Takes the whole endgame (21-30 seconds)",
+						"value": "21-30"
+					},
+					{
+						"text": "Did not climb",
+						"value": "N/A"
+					}
+				]
+			},
+			{
+				"id": "rating",
+				"atype": "integer",
+				"qtype": "numeric",
+				"question": "How would you rate the robot overall in this match? (1-7 scale)",
+				"conditional": false,
+				"required": true,
+				"default": 4,
+				"minimum": 1,
+				"maximum": 7
+			},
+			{
+				"id": "comments",
+				"atype": "text",
+				"qtype": "textbox",
+				"question": "Any comments? Did they break at all? Anything cool? Good pilot?",
+				"conditional": false,
+				"required": false,
+				"default": false
+			}
+		]
+	}
+}
